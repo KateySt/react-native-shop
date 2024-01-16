@@ -1,12 +1,9 @@
-import 'ts-node/register' // Add this to import TypeScript files
-import { ExpoConfig } from 'expo/config';
-
-// In SDK 46 and lower, use the following import instead:
-// import { ExpoConfig } from '@expo/config-types';
+import 'ts-node/register';
+import {ExpoConfig} from 'expo/config';
 
 const config: ExpoConfig = {
-    name: 'my-app',
-    slug: 'my-app',
+    name: 'shop',
+    slug: 'shop',
 };
 
 export default config;
