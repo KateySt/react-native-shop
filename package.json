@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "lint": "eslint .",
     "ts:check": "tsc",
     "start": "expo start",
     "android": "expo start --android",
@@ -14,13 +15,18 @@
     "expo": "~49.0.15",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.72.6",
-    "react-native-web": "~0.19.6",
-    "react-dom": "18.2.0"
+    "react-native-vector-icons": "^10.0.3",
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.14",
+    "@types/react-native-vector-icons": "^6.4.18",
+    "eslint": "^8.56.0",
+    "eslint-config-universe": "^12.0.0",
+    "prettier": "^3.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
