@@ -1,5 +1,6 @@
 import React from 'react';
-import { Platform, SafeAreaView, StatusBar, StyleSheet, View, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CardItem } from '@/components/CardItem';
 import { COLORS, SPACING } from '@/theme/theme';
@@ -83,7 +84,6 @@ const HomeScreen: React.FC<any> = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     backgroundColor: COLORS.primaryBlackHex,
   },
   itemContainer: {
