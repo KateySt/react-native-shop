@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {HomeScreen} from "@/screens/home/HomeScreen";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { HomeScreen } from '@/screens/home/HomeScreen';
 export default function App() {
-    return (
-        <HomeScreen/>
-    );
+  return (
+    <SafeAreaProvider>
+      <HomeScreen />
+    </SafeAreaProvider>
+  );
 }
-
-const styles = StyleSheet.create({});
