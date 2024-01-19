@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { GestureResponderEvent, Modal, Pressable, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Checkbox } from '@/components/Checkbox';
@@ -12,6 +12,11 @@ interface SideDrawerMenuProps {
 }
 
 const SideDrawerMenu: React.FC<SideDrawerMenuProps> = ({ isOpen, onClose, status }) => {
+  const handleModalPress = (e: GestureResponderEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
   if (!isOpen) {
     return null;
   }

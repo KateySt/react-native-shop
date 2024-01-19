@@ -12,9 +12,9 @@ interface SearchBarProps {
   status: (term: boolean) => void;
 }
 const SearchBar: React.FC<SearchBarProps> = ({ text, status }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [menuVisible, setMenuVisible] = useState<boolean>(false);
 
   const handleSearch = (term: string) => {
     text(term);

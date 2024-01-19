@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { GestureResponderEvent, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
@@ -9,16 +9,22 @@ interface CustomModalProps {
   content: string;
 }
 const CustomModal: React.FC<CustomModalProps> = ({ isVisible, closeModal, content }) => {
+  const handleModalPress = (e: GestureResponderEvent) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
+
   return (
     <Modal animationType="fade" transparent visible={isVisible} onRequestClose={closeModal}>
-      <View style={[styles.container, styles.content]}>
+      <Pressable style={[styles.container, styles.content]} onPress={handleModalPress}>
         <View style={styles.modalContent}>
           <Text>{content}</Text>
           <Pressable onPress={closeModal} style={styles.closeButton}>
             <Icon name="times" size={24} color={COLORS.primaryBlackHex} />
           </Pressable>
         </View>
-      </View>
+      </Pressable>
     </Modal>
   );
 };
