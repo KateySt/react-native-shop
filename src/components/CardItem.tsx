@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageProps, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
@@ -7,7 +7,7 @@ import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 interface CartItemProps {
   id: string;
   name: string;
-  image: ImageProps;
+  image: string;
   prices: any;
   isNew: boolean;
   description: string;
@@ -17,15 +17,19 @@ const CardItem: React.FC<CartItemProps> = ({ id, name, image, prices, isNew, des
   return (
     <View style={styles.cardContainer}>
       <View style={styles.card}>
-        <Image source={image} style={styles.image} />
+        <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.textContainer}>
-          <Text style={[styles.description, styles.defaultTextColor]}>{name}</Text>
+          <Text style={[styles.name, styles.defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
+            {name}
+          </Text>
           <Text>
             <Text style={!isNew ? styles.oldText : styles.newText}>new</Text>{' '}
             <Text style={isNew ? styles.oldText : styles.newText}>old</Text>
           </Text>
           <Text style={[styles.price, styles.defaultTextColor]}>${prices}</Text>
-          <Text style={[styles.description, styles.defaultTextColor]}>{description}</Text>
+          <Text style={[styles.description, styles.defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
+            {description}
+          </Text>
         </View>
         <View style={styles.iconsContainer}>
           {isNew ? <Text style={styles.newTag}>New</Text> : <Text style={styles.oldTag}>Old</Text>}
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 150,
-    height: 150,
+    height: '100%',
     borderRadius: BORDERRADIUS.radius_10,
   },
   textContainer: {
@@ -65,7 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    fontSize: FONTSIZE.size_18,
+    fontSize: FONTSIZE.size_16,
   },
   price: {
     fontSize: FONTSIZE.size_16,

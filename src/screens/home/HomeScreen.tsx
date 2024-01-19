@@ -1,82 +1,84 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CardItem } from '@/components/CardItem';
+import { SearchBar } from '@/components/SearchBar';
 import { COLORS, SPACING } from '@/theme/theme';
 
-const mockItemData = [
-  {
-    id: '1',
-    name: 'Product 1',
-    image: {
-      uri: 'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
-    },
-    prices: 5,
-    isNew: true,
-    description: 'Description for Product 1',
-  },
-  {
-    id: '2',
-    name: 'Product 2',
-    image: {
-      uri: 'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
-    },
-    prices: 4,
-    isNew: false,
-    description: 'Description for Product 2',
-  },
-  {
-    id: '3',
-    name: 'Product 3',
-    image: {
-      uri: 'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
-    },
-    prices: 10,
-    isNew: false,
-    description: 'Description for Product 3',
-  },
-  {
-    id: '4',
-    name: 'Product 4',
-    image: {
-      uri: 'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
-    },
-    prices: 10,
-    isNew: true,
-    description: 'Description for Product 4',
-  },
-  {
-    id: '5',
-    name: 'Product 5',
-    image: {
-      uri: 'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
-    },
-    prices: 10,
-    isNew: true,
-    description: 'Description for Product 5',
-  },
-];
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+  isNew: boolean;
+}
 
-const HomeScreen: React.FC<any> = () => {
+const HomeScreen: React.FC = () => {
+  const [originalData, setOriginalData] = useState<Product[]>([]);
+  const [data, setData] = useState<Product[]>([]);
+  const [text, setText] = useState<string>('');
+  const [status, setStatus] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+      .then((res) => res.json())
+      .then((data) => {
+        const newData = data.map((item: any, index: number) =>
+          index % 2 === 0
+            ? {
+                ...item,
+                isNew: true,
+              }
+            : {
+                ...item,
+                isNew: false,
+              },
+        );
+        setOriginalData(newData);
+        setData(newData);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!originalData.length) return;
+    if (text.trim() === '') {
+      setData(originalData);
+    } else {
+      setData(originalData.filter((el) => el.title.toLowerCase().includes(text.toLowerCase())));
+    }
+  }, [text, originalData]);
+
+  useEffect(() => {
+    if (!originalData.length) return;
+    console.log(status);
+    if (!status) {
+      setData(originalData.filter((el) => el.isNew !== status));
+    } else {
+      setData(originalData);
+    }
+  }, [status]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
-        <View style={styles.listItemContainer}>
-          {mockItemData.map((el, index) => (
-            <CardItem
-              style={styles.itemContainer}
-              key={index}
-              id={el.id}
-              name={el.name}
-              image={el.image}
-              prices={el.prices}
-              isNew={el.isNew}
-              description={el.description}
-            />
-          ))}
-        </View>
-      </ScrollView>
+      <SearchBar text={setText} status={setStatus} />
+      <FlatList
+        style={styles.listItemContainer}
+        data={data}
+        renderItem={({ item }) => (
+          <CardItem
+            style={styles.itemContainer}
+            id={item.id}
+            name={item.title}
+            image={item.image}
+            prices={item.price}
+            isNew={item.isNew}
+            description={item.description}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
     </SafeAreaView>
   );
 };
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
   listItemContainer: {
     paddingHorizontal: SPACING.space_20,
     gap: SPACING.space_20,
+    zIndex: 0,
   },
 });
 
