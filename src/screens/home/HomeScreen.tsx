@@ -52,7 +52,6 @@ const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     if (!originalData.length) return;
-    console.log(status);
     if (!status) {
       setData(originalData.filter((el) => el.isNew !== status));
     } else {
