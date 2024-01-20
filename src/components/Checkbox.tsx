@@ -5,16 +5,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLORS, SPACING } from '@/theme/theme';
 
 interface CheckboxProps {
-  status: (isChecked: boolean) => void;
+  onChangeStatus: (isChecked: boolean) => void;
   name: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ status, name }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ onChangeStatus, name }) => {
   const [isChecked, setChecked] = useState(false);
 
   const toggleCheckbox = () => {
     setChecked(!isChecked);
-    status(isChecked);
+    onChangeStatus(isChecked);
   };
 
   return (

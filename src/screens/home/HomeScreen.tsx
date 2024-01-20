@@ -59,25 +59,22 @@ const HomeScreen: React.FC = () => {
     }
   }, [status]);
 
+  const getItems = ({ item }) => (
+    <CardItem
+      style={styles.itemContainer}
+      id={item.id}
+      name={item.title}
+      image={item.image}
+      prices={item.price}
+      isNew={item.isNew}
+      description={item.description}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <SearchBar text={setText} status={setStatus} />
-      <FlatList
-        style={styles.listItemContainer}
-        data={data}
-        renderItem={({ item }) => (
-          <CardItem
-            style={styles.itemContainer}
-            id={item.id}
-            name={item.title}
-            image={item.image}
-            prices={item.price}
-            isNew={item.isNew}
-            description={item.description}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-      />
+      <FlatList style={styles.listItemContainer} data={data} renderItem={getItems} />
     </SafeAreaView>
   );
 };

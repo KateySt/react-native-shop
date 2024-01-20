@@ -12,22 +12,13 @@ interface SideDrawerMenuProps {
 }
 
 const SideDrawerMenu: React.FC<SideDrawerMenuProps> = ({ isOpen, onClose, status }) => {
-  const handleModalPress = (e: GestureResponderEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <Modal transparent animationType="slide" visible={isOpen} onRequestClose={onClose}>
+    <Modal transparent animationType="none" visible={isOpen} onRequestClose={onClose}>
       <View style={styles.drawer}>
         <Pressable onPress={onClose} style={styles.closeButton}>
           <Icon name="times" size={24} color={COLORS.primaryWhiteHex} />
         </Pressable>
-        <Checkbox status={status} name="only new" />
+        <Checkbox onChangeStatus={status} name="only new" />
       </View>
     </Modal>
   );
