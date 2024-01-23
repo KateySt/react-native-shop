@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CardItem } from '@/components/CardItem';
@@ -14,7 +14,17 @@ interface Product {
   image: string;
   isNew: boolean;
 }
-
+const getItems: ListRenderItem<Product> = ({ item }) => (
+  <CardItem
+    style={styles.itemContainer}
+    id={item.id}
+    name={item.title}
+    image={item.image}
+    prices={item.price}
+    isNew={item.isNew}
+    description={item.description}
+  />
+);
 const HomeScreen: React.FC = () => {
   const [originalData, setOriginalData] = useState<Product[]>([]);
   const [data, setData] = useState<Product[]>([]);
@@ -58,18 +68,6 @@ const HomeScreen: React.FC = () => {
       setData(originalData);
     }
   }, [status]);
-
-  const getItems = ({ item }) => (
-    <CardItem
-      style={styles.itemContainer}
-      id={item.id}
-      name={item.title}
-      image={item.image}
-      prices={item.price}
-      isNew={item.isNew}
-      description={item.description}
-    />
-  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
