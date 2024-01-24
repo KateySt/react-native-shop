@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, ListRenderItem, RefreshControl, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { AppDispatch, RootState } from '@/app/store';
 import { CardItem } from '@/components/CardItem';
 import { SearchBar } from '@/components/SearchBar';
+import { getProductsAsync, selectProduct, setProductsAsync } from '@/features/product/productSlice';
+import { Product } from '@/interface/Product';
 import { COLORS, SPACING } from '@/theme/theme';
-
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  image: string;
-  isNew: boolean;
-}
 
 const getItems: ListRenderItem<Product> = ({ item }) => (
   <CardItem
@@ -27,62 +22,44 @@ const getItems: ListRenderItem<Product> = ({ item }) => (
   />
 );
 const HomeScreen: React.FC = ({ navigation }) => {
-  const [originalData, setOriginalData] = useState<Product[]>([]);
-  const [data, setData] = useState<Product[]>([]);
   const [text, setText] = useState<string>('');
   const [status, setStatus] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const products = useSelector(selectProduct);
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then((res) => res.json())
-      .then((data) => {
-        const newData = data.map((item: any, index: number) =>
-          index % 2 === 0
-            ? {
-                ...item,
-                isNew: true,
-              }
-            : {
-                ...item,
-                isNew: false,
-              },
-        );
-        setOriginalData(newData);
-        setData(newData);
-      });
+    dispatch(getProductsAsync());
   }, []);
 
   useEffect(() => {
-    if (!originalData.length) return;
     if (text.trim() === '') {
-      setData(originalData);
+      dispatch(setProductsAsync());
     } else {
-      setData(originalData.filter((el) => el.title.toLowerCase().includes(text.toLowerCase())));
+      dispatch(setProductsAsync(products.filter((el) => el.title.toLowerCase().includes(text.toLowerCase()))));
     }
-  }, [text, originalData]);
+  }, [text]);
 
   useEffect(() => {
-    if (!originalData.length) return;
     if (!status) {
-      setData(originalData.filter((el) => el.isNew !== status));
+      dispatch(setProductsAsync(products.filter((el) => el.isNew !== status)));
     } else {
-      setData(originalData);
+      dispatch(setProductsAsync(products));
     }
   }, [status]);
+
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
       const newItem = {
-        id: originalData.length + 1,
+        id: products.length + 1,
         title: 'New Item',
         price: 10,
         description: 'Description of the new item',
         image: 'https://example.com/new_item.jpg',
         isNew: true,
       };
-      setOriginalData([newItem, ...originalData]);
-      setData([newItem, ...originalData]);
+      dispatch(setProductsAsync([newItem, ...products]));
       setRefreshing(false);
     }, 3000);
   };
@@ -90,15 +67,14 @@ const HomeScreen: React.FC = ({ navigation }) => {
   const handleEndReached = () => {
     setTimeout(() => {
       const newItems = Array.from({ length: 5 }, (_, index) => ({
-        id: originalData.length + index + 1,
+        id: products.length + index + 1,
         title: `New Item ${index + 1}`,
         price: 10 + index,
         description: `Description of the new item ${index + 1}`,
         image: `https://example.com/new_item_${index + 1}.jpg`,
         isNew: true,
       }));
-      setOriginalData([...originalData, ...newItems]);
-      setData([...originalData, ...newItems]);
+      dispatch(setProductsAsync([...products, ...newItems]));
     }, 3000);
   };
 
@@ -108,7 +84,7 @@ const HomeScreen: React.FC = ({ navigation }) => {
       <SearchBar text={setText} status={setStatus} />
       <FlatList
         style={styles.listItemContainer}
-        data={data}
+        data={products}
         renderItem={getItems}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
         onEndReached={handleEndReached}

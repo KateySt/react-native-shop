@@ -2,24 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Image, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Product } from '@/screens/home/HomeScreen';
+import { AppDispatch } from '@/app/store';
+import { getProductsAsync, selectProduct } from '@/features/product/productSlice';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const CarouselScreen: React.FC = () => {
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [data, setData] = useState<Product[]>([]);
-
+  const products = useSelector(selectProduct);
+  const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then((res) => res.json())
-      .then(setData);
+    dispatch(getProductsAsync());
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (carouselRef.current && activeIndex < data.length - 1) {
+      if (carouselRef.current && activeIndex < products.length - 1) {
         (carouselRef.current as any).snapToNext();
       } else {
         (carouselRef.current as any).snapToItem(0);
@@ -30,7 +30,7 @@ const CarouselScreen: React.FC = () => {
   }, [activeIndex]);
 
   const handleShare = async () => {
-    const current = data[activeIndex];
+    const current = products[activeIndex];
     await Share.share({
       message: current.title,
       url: current.image,
@@ -50,7 +50,7 @@ const CarouselScreen: React.FC = () => {
 
   const renderPagination = () => (
     <Pagination
-      dotsLength={data.length}
+      dotsLength={products.length}
       activeDotIndex={activeIndex}
       containerStyle={styles.paginationContainer}
       dotStyle={styles.dotStyle}
@@ -65,7 +65,7 @@ const CarouselScreen: React.FC = () => {
       <View style={styles.container}>
         <Carousel
           ref={carouselRef}
-          data={data}
+          data={products}
           renderItem={renderItem}
           sliderWidth={300}
           itemWidth={300}
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: SPACING.space_4,
     height: SPACING.space_4,
     borderRadius: SPACING.space_4,
-    backgroundColor: COLORS.primaryYellowHex,
+    backgroundColor: COLORS.primaryVioletHex,
   },
   inactiveDotStyle: {
     width: SPACING.space_4,
