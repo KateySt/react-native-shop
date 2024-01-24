@@ -6,13 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch } from '@/app/store';
 import { getProductsAsync, selectProduct } from '@/features/product/productSlice';
+import { Product } from '@/interface/Product';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const CarouselScreen: React.FC = () => {
-  const carouselRef = useRef(null);
+  const carouselRef = useRef<Carousel<Product>>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const products = useSelector(selectProduct);
   const dispatch: AppDispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getProductsAsync());
   }, []);
@@ -37,7 +39,7 @@ const CarouselScreen: React.FC = () => {
     }).catch((err) => console.warn(err));
   };
 
-  const renderItem: ({ item }: string) => React.JSX.Element = ({ item }: string) => (
+  const renderItem: ({ item }: { item: Product }) => React.JSX.Element = ({ item }) => (
     <TouchableOpacity onPress={handleShare}>
       {item && item.image && (
         <View>

@@ -3,7 +3,7 @@ import { Button, FlatList, ListRenderItem, RefreshControl, StyleSheet } from 're
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AppDispatch, RootState } from '@/app/store';
+import { AppDispatch } from '@/app/store';
 import { CardItem } from '@/components/CardItem';
 import { SearchBar } from '@/components/SearchBar';
 import { getProductsAsync, selectProduct, setProductsAsync } from '@/features/product/productSlice';
