@@ -1,3 +1,4 @@
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +11,7 @@ import { Product } from '@/interface/Product';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const CarouselScreen: React.FC = () => {
-  const carouselRef = useRef<Carousel<Product>>(null);
+  const carouselRef = useRef<ViewPropTypes<Product>>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const products = useSelector(selectProduct);
   const dispatch: AppDispatch = useDispatch();
@@ -71,7 +72,7 @@ const CarouselScreen: React.FC = () => {
           renderItem={renderItem}
           sliderWidth={300}
           itemWidth={300}
-          onSnapToItem={(index) => setActiveIndex(index)}
+          onSnapToItem={setActiveIndex}
           loop
         />
         {renderPagination()}

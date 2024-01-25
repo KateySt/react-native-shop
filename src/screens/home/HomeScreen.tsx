@@ -10,18 +10,21 @@ import { getProductsAsync, selectProduct, setProductsAsync } from '@/features/pr
 import { Product } from '@/interface/Product';
 import { COLORS, SPACING } from '@/theme/theme';
 
-const getItems: ListRenderItem<Product> = ({ item }) => (
-  <CardItem
-    style={styles.itemContainer}
-    id={item.id}
-    name={item.title}
-    image={item.image}
-    prices={item.price}
-    isNew={item.isNew}
-    description={item.description}
-  />
-);
-const HomeScreen: React.FC = ({ navigation }) => {
+const getItems: ListRenderItem<Product> = ({ item }) => {
+  if (!item || !item.id) return null;
+  return (
+    <CardItem
+      style={styles.itemContainer}
+      id={item.id}
+      name={item.title}
+      image={item.image}
+      prices={item.price}
+      isNew={item.isNew}
+      description={item.description}
+    />
+  );
+};
+const HomeScreen: React.FC = ({ navigation }: any) => {
   const [text, setText] = useState<string>('');
   const [status, setStatus] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -51,12 +54,13 @@ const HomeScreen: React.FC = ({ navigation }) => {
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
-      const newItem = {
-        id: products.length + 1,
+      const newItem: Product = {
+        id: products.length + Math.random() + Date.now(),
         title: 'New Item',
         price: 10,
         description: 'Description of the new item',
-        image: 'https://example.com/new_item.jpg',
+        image:
+          'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
         isNew: true,
       };
       dispatch(setProductsAsync([newItem, ...products]));
@@ -66,12 +70,12 @@ const HomeScreen: React.FC = ({ navigation }) => {
 
   const handleEndReached = () => {
     setTimeout(() => {
-      const newItems = Array.from({ length: 5 }, (_, index) => ({
-        id: products.length + index + 1,
+      const newItems: Product[] = Array.from({ length: 5 }, (_, index) => ({
+        id: products.length + Date.now() + Math.random(),
         title: `New Item ${index + 1}`,
         price: 10 + index,
         description: `Description of the new item ${index + 1}`,
-        image: `https://example.com/new_item_${index + 1}.jpg`,
+        image: `https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg`,
         isNew: true,
       }));
       dispatch(setProductsAsync([...products, ...newItems]));
@@ -80,7 +84,7 @@ const HomeScreen: React.FC = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Button title="Go to Jane's profile" onPress={() => navigation.navigate('Carousel')} />
+      <Button title="Go to Crusel" onPress={() => navigation.navigate('Carousel')} />
       <SearchBar text={setText} status={setStatus} />
       <FlatList
         style={styles.listItemContainer}
