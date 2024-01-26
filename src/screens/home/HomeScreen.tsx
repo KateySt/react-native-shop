@@ -1,78 +1,99 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, ListRenderItem, StyleSheet } from 'react-native';
+import { Button, FlatList, ListRenderItem, RefreshControl, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { AppDispatch } from '@/app/store';
 import { CardItem } from '@/components/CardItem';
 import { SearchBar } from '@/components/SearchBar';
+import { getProductsAsync, selectProduct, setProductsAsync } from '@/features/product/productSlice';
+import { Product } from '@/interface/Product';
 import { COLORS, SPACING } from '@/theme/theme';
 
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  image: string;
-  isNew: boolean;
-}
-const getItems: ListRenderItem<Product> = ({ item }) => (
-  <CardItem
-    style={styles.itemContainer}
-    id={item.id}
-    name={item.title}
-    image={item.image}
-    prices={item.price}
-    isNew={item.isNew}
-    description={item.description}
-  />
-);
-const HomeScreen: React.FC = () => {
-  const [originalData, setOriginalData] = useState<Product[]>([]);
-  const [data, setData] = useState<Product[]>([]);
+const getItems: ListRenderItem<Product> = ({ item }) => {
+  if (!item || !item.id) return null;
+  return (
+    <CardItem
+      style={styles.itemContainer}
+      id={item.id}
+      name={item.title}
+      image={item.image}
+      prices={item.price}
+      isNew={item.isNew}
+      description={item.description}
+    />
+  );
+};
+const HomeScreen: React.FC = ({ navigation }: any) => {
   const [text, setText] = useState<string>('');
   const [status, setStatus] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const products = useSelector(selectProduct);
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then((res) => res.json())
-      .then((data) => {
-        const newData = data.map((item: any, index: number) =>
-          index % 2 === 0
-            ? {
-                ...item,
-                isNew: true,
-              }
-            : {
-                ...item,
-                isNew: false,
-              },
-        );
-        setOriginalData(newData);
-        setData(newData);
-      });
+    dispatch(getProductsAsync());
   }, []);
 
   useEffect(() => {
-    if (!originalData.length) return;
     if (text.trim() === '') {
-      setData(originalData);
+      dispatch(setProductsAsync());
     } else {
-      setData(originalData.filter((el) => el.title.toLowerCase().includes(text.toLowerCase())));
+      dispatch(setProductsAsync(products.filter((el) => el.title.toLowerCase().includes(text.toLowerCase()))));
     }
-  }, [text, originalData]);
+  }, [text]);
 
   useEffect(() => {
-    if (!originalData.length) return;
     if (!status) {
-      setData(originalData.filter((el) => el.isNew !== status));
+      dispatch(setProductsAsync(products.filter((el) => el.isNew !== status)));
     } else {
-      setData(originalData);
+      dispatch(setProductsAsync(products));
     }
   }, [status]);
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      const newItem: Product = {
+        id: products.length + Math.random() + Date.now(),
+        title: 'New Item',
+        price: 10,
+        description: 'Description of the new item',
+        image:
+          'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg',
+        isNew: true,
+      };
+      dispatch(setProductsAsync([newItem, ...products]));
+      setRefreshing(false);
+    }, 3000);
+  };
+
+  const handleEndReached = () => {
+    setTimeout(() => {
+      const newItems: Product[] = Array.from({ length: 5 }, (_, index) => ({
+        id: products.length + Date.now() + Math.random(),
+        title: `New Item ${index + 1}`,
+        price: 10 + index,
+        description: `Description of the new item ${index + 1}`,
+        image: `https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg`,
+        isNew: true,
+      }));
+      dispatch(setProductsAsync([...products, ...newItems]));
+    }, 3000);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
+      <Button title="Go to Crusel" onPress={() => navigation.navigate('Carousel')} />
       <SearchBar text={setText} status={setStatus} />
-      <FlatList style={styles.listItemContainer} data={data} renderItem={getItems} />
+      <FlatList
+        style={styles.listItemContainer}
+        data={products}
+        renderItem={getItems}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
+      />
     </SafeAreaView>
   );
 };
