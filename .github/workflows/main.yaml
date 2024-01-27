@@ -6,41 +6,34 @@ on:
       - main
 
 jobs:
-  build:
+  update:
+    name: EAS Update
     runs-on: ubuntu-latest
-
     steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Set current date as env variable
-        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-      - name: Set repository name as env variable
-        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
+          cache: yarn
 
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
-
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
-
-      - name: Install patch-package
-        run: npm install -g patch-package
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
-      - name: Build Expo Android App
-        run: eas build --platform android
-
-      - name: Upload APK Release - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.date_today }} - ${{ env.repository_name }} - APK(s) release generated
-          path: ./android/app/build/outputs/apk/release/
+      - name: Publish update
+        run: eas update --auto
