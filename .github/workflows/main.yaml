@@ -27,6 +27,9 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli
 
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
       - name: Install patch-package
         run: npm install -g patch-package
 
@@ -34,7 +37,7 @@ jobs:
         run: npm install
 
       - name: Build Expo Android App
-        run: expo build:android --release-channel ${{ env.date_today }}
+        run: eas build --platform android --release-channel ${{ env.date_today }}
 
       - name: Upload APK Release - ${{ env.repository_name }}
         uses: actions/upload-artifact@v3
