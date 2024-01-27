@@ -40,11 +40,3 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: EAS Init
-        run: eas init --platform android
-
-      - name: Create preview
-        uses: expo/expo-github-action/preview@v8
-        with:
-          command: eas update --auto --json --non-interactive
