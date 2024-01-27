@@ -28,7 +28,7 @@ jobs:
         run: npm install -g expo-cli
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Build Expo Android App
         run: expo build:android --release-channel ${{ env.date_today }}
