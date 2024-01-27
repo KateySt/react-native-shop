@@ -32,6 +32,11 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: EAS Init
+        run: eas init --platform android
+        env:
+          EAS_BUILD_PROFILE: release
+
       - name: Install patch-package
         run: npm install -g patch-package
 
