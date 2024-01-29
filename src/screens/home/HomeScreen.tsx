@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, ListRenderItem, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, ListRenderItem, RefreshControl, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -55,7 +55,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
     setRefreshing(true);
     setTimeout(() => {
       const newItem: Product = {
-        id: products.length + Math.random() + Date.now(),
+        id: products.length + Date.now(),
         title: 'New Item',
         price: 10,
         description: 'Description of the new item',
@@ -71,7 +71,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
   const handleEndReached = () => {
     setTimeout(() => {
       const newItems: Product[] = Array.from({ length: 5 }, (_, index) => ({
-        id: products.length + Date.now() + Math.random(),
+        id: products.length + Date.now(),
         title: `New Item ${index + 1}`,
         price: 10 + index,
         description: `Description of the new item ${index + 1}`,
@@ -84,8 +84,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Button title="Go to Crusel" onPress={() => navigation.navigate('Carousel')} />
-      <SearchBar text={setText} status={setStatus} />
+      <SearchBar text={setText} status={setStatus} navigation={navigation} />
       <FlatList
         style={styles.listItemContainer}
         data={products}

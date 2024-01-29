@@ -18,9 +18,6 @@ module.exports = async function (env: Environment, argv: Arguments) {
       '@/hooks/*': './src/hooks/*',
       '@/interface/*': './src/interface/*',
       '@/theme/*': './src/theme/*',
-      '@/screens/carousel/CarouselScreen': './src/screens/carousel/CarouselScreen',
-      '@/screens/home/HomeScreen': './src/screens/home/HomeScreen',
-      '@/app/store': './src/app/store',
     };
   }
   return config;

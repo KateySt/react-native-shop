@@ -5,13 +5,9 @@ import { Platform, Pressable, StyleSheet, TextInput, TouchableNativeFeedback, Vi
 import { CustomModal } from '@/components/CustomModal';
 import { SideDrawerMenu } from '@/components/SideDrawerMenu';
 import { useDebouncedSearch } from '@/hooks/useDebouncedSearch';
+import { SearchBarProps } from '@/interface/SearchBarProps';
 import { COLORS, SPACING } from '@/theme/theme';
-
-interface SearchBarProps {
-  text: (term: string) => void;
-  status: (term: boolean) => void;
-}
-const SearchBar: React.FC<SearchBarProps> = ({ text, status }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
@@ -67,7 +63,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ text, status }) => {
           </PressableComponent>
         </View>
       </View>
-      <SideDrawerMenu isOpen={menuVisible} onClose={hideMenu} status={status} />
+      <SideDrawerMenu isOpen={menuVisible} onClose={hideMenu} status={status} navigation={navigation} />
       <CustomModal isVisible={modalVisible} closeModal={hideModal} content="Close me !!!" />
     </View>
   );

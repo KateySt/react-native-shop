@@ -2,16 +2,8 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { CartItemProps } from '@/interface/CartItemProps';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
-
-interface CartItemProps {
-  id: string;
-  name: string;
-  image: string;
-  prices: any;
-  isNew: boolean;
-  description: string;
-}
 
 const CardItem: React.FC<CartItemProps> = ({ id, name, image, prices, isNew, description }) => {
   return (

@@ -1,17 +1,12 @@
 import React from 'react';
-import { GestureResponderEvent, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Button, Modal, Pressable, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Checkbox } from '@/components/Checkbox';
+import { SideDrawerMenuProps } from '@/interface/SideDrawerMenuProps';
 import { COLORS, SPACING } from '@/theme/theme';
 
-interface SideDrawerMenuProps {
-  isOpen: boolean;
-  onClose: () => void;
-  status: (isChecked: boolean) => void;
-}
-
-const SideDrawerMenu: React.FC<SideDrawerMenuProps> = ({ isOpen, onClose, status }) => {
+const SideDrawerMenu: React.FC<SideDrawerMenuProps> = ({ isOpen, onClose, status, navigation }) => {
   return (
     <Modal transparent animationType="none" visible={isOpen} onRequestClose={onClose}>
       <View style={styles.drawer}>
@@ -19,6 +14,7 @@ const SideDrawerMenu: React.FC<SideDrawerMenuProps> = ({ isOpen, onClose, status
           <Icon name="times" size={24} color={COLORS.primaryWhiteHex} />
         </Pressable>
         <Checkbox onChangeStatus={status} name="only new" />
+        <Button title="Go to Crusel" onPress={() => navigation.navigate('Carousel')} />
       </View>
     </Modal>
   );

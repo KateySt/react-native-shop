@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { CheckboxProps } from '@/interface/CheckboxProps';
 import { COLORS, SPACING } from '@/theme/theme';
-
-interface CheckboxProps {
-  onChangeStatus: (isChecked: boolean) => void;
-  name: string;
-}
-
 const Checkbox: React.FC<CheckboxProps> = ({ onChangeStatus, name }) => {
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState<boolean>(false);
 
   const toggleCheckbox = () => {
     setChecked(!isChecked);

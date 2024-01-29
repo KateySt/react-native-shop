@@ -2,12 +2,9 @@ import React from 'react';
 import { GestureResponderEvent, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { CustomModalProps } from '@/interface/CustomModalProps';
 import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
-interface CustomModalProps {
-  isVisible: boolean;
-  closeModal: () => void;
-  content: string;
-}
+
 const CustomModal: React.FC<CustomModalProps> = ({ isVisible, closeModal, content }) => {
   const handleModalPress = (e: GestureResponderEvent) => {
     if (e.target === e.currentTarget) {
