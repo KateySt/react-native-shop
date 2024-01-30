@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { CartItemProps } from '@/interface/CartItemProps';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
-const CardItem: React.FC<CartItemProps> = ({ id, name, image, prices, isNew, description }) => {
+const CardItem: React.FC<CartItemProps> = ({ id, name, image, prices, description }) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.card}>
@@ -14,17 +14,12 @@ const CardItem: React.FC<CartItemProps> = ({ id, name, image, prices, isNew, des
           <Text style={[styles.name, styles.defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
             {name}
           </Text>
-          <Text>
-            <Text style={!isNew ? styles.oldText : styles.newText}>new</Text>{' '}
-            <Text style={isNew ? styles.oldText : styles.newText}>old</Text>
-          </Text>
           <Text style={[styles.price, styles.defaultTextColor]}>${prices}</Text>
           <Text style={[styles.description, styles.defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
             {description}
           </Text>
         </View>
         <View style={styles.iconsContainer}>
-          {isNew ? <Text style={styles.newTag}>New</Text> : <Text style={styles.oldTag}>Old</Text>}
           <TouchableOpacity>
             <Icon name="shopping-cart" size={20} color={COLORS.primaryWhiteHex} />
           </TouchableOpacity>
@@ -70,18 +65,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: FONTSIZE.size_14,
     marginTop: SPACING.space_4,
-  },
-  newTag: {
-    backgroundColor: COLORS.primaryLightGreyHex,
-    color: COLORS.primaryWhiteHex,
-    paddingHorizontal: SPACING.space_4,
-    borderRadius: BORDERRADIUS.radius_4,
-  },
-  oldTag: {
-    backgroundColor: COLORS.secondaryDarkGreyHex,
-    color: COLORS.primaryLightGreyHex,
-    paddingHorizontal: SPACING.space_4,
-    borderRadius: BORDERRADIUS.radius_4,
   },
   iconsContainer: {
     justifyContent: 'space-between',

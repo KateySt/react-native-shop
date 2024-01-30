@@ -3,6 +3,5 @@ export interface CartItemProps {
   name: string;
   image: string;
   prices: any;
-  isNew: boolean;
   description: string;
 }

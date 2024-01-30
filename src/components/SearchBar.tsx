@@ -3,15 +3,13 @@ import React, { useState } from 'react';
 import { Platform, Pressable, StyleSheet, TextInput, TouchableNativeFeedback, View } from 'react-native';
 
 import { CustomModal } from '@/components/CustomModal';
-import { SideDrawerMenu } from '@/components/SideDrawerMenu';
 import { useDebouncedSearch } from '@/hooks/useDebouncedSearch';
 import { SearchBarProps } from '@/interface/SearchBarProps';
 import { COLORS, SPACING } from '@/theme/theme';
+
 const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [menuVisible, setMenuVisible] = useState<boolean>(false);
-
   const handleSearch = (term: string) => {
     text(term);
   };
@@ -21,14 +19,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
   const showModal = (): void => {
     setModalVisible(true);
   };
-  const toggleMenu = (): void => {
-    setMenuVisible(!menuVisible);
-  };
   const hideModal = (): void => {
     setModalVisible(false);
-  };
-  const hideMenu = (): void => {
-    setMenuVisible(false);
   };
   const showInput = (): void => {
     setIsVisible(!isVisible);
@@ -58,12 +50,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
           <PressableComponent onPress={showModal}>
             <Icon name="favorite" size={36} color={COLORS.primaryRedHex} />
           </PressableComponent>
-          <PressableComponent onPress={toggleMenu}>
-            <Icon name="menu" size={36} color={COLORS.primaryWhiteHex} />
-          </PressableComponent>
         </View>
       </View>
-      <SideDrawerMenu isOpen={menuVisible} onClose={hideMenu} status={status} navigation={navigation} />
       <CustomModal isVisible={modalVisible} closeModal={hideModal} content="Close me !!!" />
     </View>
   );
