@@ -39,4 +39,7 @@ export const exploreScreenOptions: TabScreenOptions = {
   headerLeft: ExploreHeaderLeft,
   headerTitle: '',
   headerShown: true,
+  headerStyle: {
+    height: 0,
+  },
 };
