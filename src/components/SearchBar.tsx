@@ -1,15 +1,20 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Icon } from '@rneui/themed';
 import React, { useState } from 'react';
-import { Platform, Pressable, StyleSheet, TextInput, TouchableNativeFeedback, View } from 'react-native';
+import { StyleSheet, TextInput, useColorScheme, View } from 'react-native';
 
 import { CustomModal } from '@/components/CustomModal';
+import { PressableComponent } from '@/components/PressableComponent';
 import { useDebouncedSearch } from '@/hooks/useDebouncedSearch';
 import { SearchBarProps } from '@/interface/SearchBarProps';
+import { HomeStackParamList } from '@/navigation/native-stack/types';
 import { COLORS, SPACING } from '@/theme/theme';
 
-const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ text }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+  const isDark = useColorScheme() === 'dark';
   const [isVisible, setIsVisible] = useState<boolean>(true);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const handleSearch = (term: string) => {
     text(term);
   };
@@ -17,10 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
   const { searchTerm, handleSearch: debouncedHandleSearch, handleClose } = useDebouncedSearch(handleSearch);
 
   const showModal = (): void => {
-    setModalVisible(true);
-  };
-  const hideModal = (): void => {
-    setModalVisible(false);
+    navigation.navigate('HeartScreen', { visible: true });
   };
   const showInput = (): void => {
     setIsVisible(!isVisible);
@@ -29,14 +31,25 @@ const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
     }
   };
 
-  const PressableComponent = Platform.OS === 'android' ? TouchableNativeFeedback : Pressable;
+  const inputStyle = [
+    styles.input,
+    { color: isDark ? COLORS.primaryWhiteHex : COLORS.secondaryBlackRGBA },
+    { borderColor: isDark ? COLORS.secondaryLightGreyHex : COLORS.primaryBlackRGBA },
+  ];
+
+  const headerContainerStyle = [
+    styles.headerContainer,
+    { backgroundColor: isDark ? COLORS.primaryBlackHex : COLORS.primaryWhiteHex },
+  ];
+
+  const searchColor = isDark ? COLORS.primaryWhiteHex : COLORS.secondaryBlackRGBA;
 
   return (
-    <View style={styles.headerContainer}>
+    <View style={headerContainerStyle}>
       <View style={styles.container}>
         {isVisible && (
           <TextInput
-            style={styles.input}
+            style={inputStyle}
             placeholder="Search..."
             value={searchTerm}
             onChangeText={debouncedHandleSearch}
@@ -45,14 +58,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ text, status, navigation }) => {
         )}
         <View style={styles.rightIcons}>
           <PressableComponent onPress={showInput}>
-            <Icon name="search" size={36} color={COLORS.primaryWhiteHex} />
+            <Icon name="search" size={36} color={searchColor} />
           </PressableComponent>
           <PressableComponent onPress={showModal}>
             <Icon name="favorite" size={36} color={COLORS.primaryRedHex} />
           </PressableComponent>
         </View>
       </View>
-      <CustomModal isVisible={modalVisible} closeModal={hideModal} content="Close me !!!" />
+      <CustomModal />
     </View>
   );
 };
@@ -62,9 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
-    color: COLORS.primaryWhiteHex,
     flex: 1,
-    borderColor: COLORS.secondaryLightGreyHex,
     borderWidth: 1,
     borderRadius: SPACING.space_4,
     paddingLeft: SPACING.space_8,
@@ -76,7 +87,6 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   headerContainer: {
-    backgroundColor: COLORS.primaryBlackHex,
     paddingHorizontal: SPACING.space_20,
     marginTop: SPACING.space_4,
     marginBottom: SPACING.space_4,

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, useColorScheme } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { PressableComponent } from '@/components/PressableComponent';
 import { CheckboxProps } from '@/interface/CheckboxProps';
 import { COLORS, SPACING } from '@/theme/theme';
+
 const Checkbox: React.FC<CheckboxProps> = ({ onChangeStatus, name }) => {
   const [isChecked, setChecked] = useState<boolean>(false);
+  const isDark = useColorScheme() === 'dark';
+  const checkboxColor = isDark ? COLORS.primaryWhiteHex : COLORS.secondaryBlackRGBA;
 
   const toggleCheckbox = () => {
     setChecked(!isChecked);
@@ -13,14 +17,14 @@ const Checkbox: React.FC<CheckboxProps> = ({ onChangeStatus, name }) => {
   };
 
   return (
-    <TouchableOpacity onPress={toggleCheckbox} style={styles.checkboxContainer}>
+    <PressableComponent onPress={toggleCheckbox} style={styles.checkboxContainer}>
       {isChecked ? (
-        <Icon name="check-square" size={24} color={COLORS.primaryWhiteHex} />
+        <Icon name="check-square" size={24} color={checkboxColor} />
       ) : (
-        <Icon name="square" size={24} color={COLORS.primaryWhiteHex} />
+        <Icon name="square" size={24} color={checkboxColor} />
       )}
       <Text style={styles.checkboxLabel}>{name}</Text>
-    </TouchableOpacity>
+    </PressableComponent>
   );
 };
 
