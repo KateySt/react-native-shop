@@ -1,31 +1,40 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { PressableComponent } from '@/components/PressableComponent';
 import { CartItemProps } from '@/interface/CartItemProps';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
-const CardItem: React.FC<CartItemProps> = ({ id, name, image, prices, description }) => {
+const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description }) => {
+  const isDark = useColorScheme() === 'dark';
+  const screenCardStyle = [
+    styles.card,
+    { backgroundColor: isDark ? COLORS.primaryDarkGreyHex : COLORS.primaryDarkWhiteHex },
+    { shadowColor: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex },
+  ];
+  const defaultTextColor = [{ color: isDark ? COLORS.secondaryLightGreyHex : COLORS.secondaryBlackRGBA }];
+  const shoppingCartColor = isDark ? COLORS.primaryWhiteHex : COLORS.secondaryBlackRGBA;
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.card}>
+      <View style={screenCardStyle}>
         <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.textContainer}>
-          <Text style={[styles.name, styles.defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
+          <Text style={[styles.name, defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
             {name}
           </Text>
-          <Text style={[styles.price, styles.defaultTextColor]}>${prices}</Text>
-          <Text style={[styles.description, styles.defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
+          <Text style={[styles.price, defaultTextColor]}>${prices}</Text>
+          <Text style={[styles.description, defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
             {description}
           </Text>
         </View>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity>
-            <Icon name="shopping-cart" size={20} color={COLORS.primaryWhiteHex} />
-          </TouchableOpacity>
-          <TouchableOpacity>
+          <PressableComponent>
+            <Icon name="shopping-cart" size={20} color={shoppingCartColor} />
+          </PressableComponent>
+          <PressableComponent>
             <Icon name="heart" size={20} color={COLORS.primaryRedHex} />
-          </TouchableOpacity>
+          </PressableComponent>
         </View>
       </View>
     </View>
@@ -37,12 +46,10 @@ const styles = StyleSheet.create({
     margin: SPACING.space_10,
   },
   card: {
-    shadowColor: COLORS.primaryWhiteHex,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.2,
     shadowRadius: BORDERRADIUS.radius_10,
     elevation: 8,
-    backgroundColor: COLORS.primaryDarkGreyHex,
     borderRadius: BORDERRADIUS.radius_10,
     flexDirection: 'row',
   },
@@ -72,16 +79,6 @@ const styles = StyleSheet.create({
     marginRight: SPACING.space_8,
     top: SPACING.space_8,
     marginBottom: SPACING.space_15,
-  },
-  oldText: {
-    textDecorationLine: 'line-through',
-    color: COLORS.primaryLightGreyHex,
-  },
-  defaultTextColor: {
-    color: COLORS.secondaryLightGreyHex,
-  },
-  newText: {
-    color: COLORS.primaryWhiteHex,
   },
 });
 
