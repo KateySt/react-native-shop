@@ -1,7 +1,7 @@
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, ListRenderItem, Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Dimensions, FlatList, ListRenderItem, Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,6 +13,8 @@ import { Product } from '@/interface/Product';
 import { HomeStackParamList } from '@/navigation/native-stack/types';
 import { COLORS, SPACING } from '@/theme/theme';
 
+const windowWidth = Dimensions.get('window').width;
+const numColumns = windowWidth > 600 ? 3 : 1;
 const ProductsScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [text, setText] = useState<string>('');
@@ -61,7 +63,15 @@ const ProductsScreen: React.FC = () => {
   return (
     <SafeAreaView style={screenBackgroundStyle}>
       <SearchBar text={setText} />
-      {products && <FlatList ref={ref} style={styles.listItemContainer} data={products} renderItem={getItems} />}
+      {products && (
+        <FlatList
+          ref={ref}
+          style={styles.listItemContainer}
+          data={products}
+          renderItem={getItems}
+          numColumns={numColumns}
+        />
+      )}
     </SafeAreaView>
   );
 };

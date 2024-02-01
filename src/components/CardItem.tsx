@@ -1,11 +1,14 @@
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, useColorScheme, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { CartItemProps } from '@/interface/CartItemProps';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
+const windowWidth = Dimensions.get('window').width;
+const numColumns = windowWidth > 600 ? 3 : 1;
+const columnWidth = (windowWidth - SPACING.space_20 * (numColumns + 1)) / numColumns;
 const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description }) => {
   const isDark = useColorScheme() === 'dark';
   const screenCardStyle = [
@@ -44,6 +47,7 @@ const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description })
 const styles = StyleSheet.create({
   cardContainer: {
     margin: SPACING.space_10,
+    width: columnWidth,
   },
   card: {
     shadowOffset: { width: 0, height: 6 },
