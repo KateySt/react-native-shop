@@ -1,6 +1,6 @@
+import { Entypo } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, Text, useColorScheme } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { CheckboxProps } from '@/interface/CheckboxProps';
@@ -19,9 +19,9 @@ const Checkbox: React.FC<CheckboxProps> = ({ onChangeStatus, name }) => {
   return (
     <PressableComponent onPress={toggleCheckbox} style={styles.checkboxContainer}>
       {isChecked ? (
-        <Icon name="check-square" size={24} color={checkboxColor} />
+        <Entypo name="squared-plus" size={24} color={checkboxColor} />
       ) : (
-        <Icon name="square" size={24} color={checkboxColor} />
+        <Entypo name="squared-minus" size={24} color={checkboxColor} />
       )}
       <Text style={styles.checkboxLabel}>{name}</Text>
     </PressableComponent>

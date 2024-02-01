@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Icon } from '@rneui/themed';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, useColorScheme, View } from 'react-native';
 
@@ -58,10 +58,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ text }) => {
         )}
         <View style={styles.rightIcons}>
           <PressableComponent onPress={showInput}>
-            <Icon name="search" size={36} color={searchColor} />
+            <Ionicons name="search" size={36} color={searchColor} />
           </PressableComponent>
           <PressableComponent onPress={showModal}>
-            <Icon name="favorite" size={36} color={COLORS.primaryRedHex} />
+            <Ionicons name="heart" size={36} color={COLORS.primaryRedHex} />
           </PressableComponent>
         </View>
       </View>

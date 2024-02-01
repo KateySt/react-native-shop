@@ -1,6 +1,6 @@
+import { Entypo, Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { CartItemProps } from '@/interface/CartItemProps';
@@ -30,10 +30,10 @@ const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description })
         </View>
         <View style={styles.iconsContainer}>
           <PressableComponent>
-            <Icon name="shopping-cart" size={20} color={shoppingCartColor} />
+            <Entypo name="shopping-cart" size={20} color={shoppingCartColor} />
           </PressableComponent>
           <PressableComponent>
-            <Icon name="heart" size={20} color={COLORS.primaryRedHex} />
+            <Ionicons name="heart" size={20} color={COLORS.primaryRedHex} />
           </PressableComponent>
         </View>
       </View>

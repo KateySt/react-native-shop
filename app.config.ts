@@ -25,7 +25,7 @@ const config: ExpoConfig = {
   },
   web: {
     favicon: './assets/favicon.png',
-    bundler: 'webpack',
+    bundler: 'metro',
   },
   experiments: {
     tsconfigPaths: true,

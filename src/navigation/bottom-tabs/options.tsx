@@ -25,7 +25,7 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
           break;
         }
         case 'Carousel': {
-          iconName = focused ? 'ios-play' : 'ios-pause';
+          iconName = focused ? 'play' : 'stop';
           break;
         }
       }

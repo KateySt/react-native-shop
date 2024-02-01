@@ -10,7 +10,6 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import StarRating from 'react-native-star-rating';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch } from '@/app/store';
@@ -79,14 +78,14 @@ const ProductScreen: React.FC = ({ route }: any) => {
                   </View>
                 )}
                 <View style={styles.ratingContainer}>
-                  <StarRating
+                  {/*<StarRating
                     disabled
                     maxStars={5}
                     rating={product.rating.rate}
                     starSize={25}
                     fullStarColor={COLORS.primaryYellowHex}
                     emptyStarColor={isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex}
-                  />
+                  />*/}
                   <Text style={[styles.ratingText, textStyle]}>({product.rating.count} ratings)</Text>
                 </View>
               </View>

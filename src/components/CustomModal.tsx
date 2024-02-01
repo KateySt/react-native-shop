@@ -1,7 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
@@ -31,7 +31,7 @@ const CustomModal: React.FC = ({ route }: any) => {
       <PressableComponent style={[styles.container, styles.content]}>
         <View style={screenModalStyle}>
           <PressableComponent onPress={closeModal} style={styles.closeButton}>
-            <Icon name="times" size={24} color={COLORS.primaryBlackHex} />
+            <Ionicons name="close" size={24} color={COLORS.primaryBlackHex} />
           </PressableComponent>
           <Text style={[styles.text, defaultTextColor]}>Close me !</Text>
         </View>
