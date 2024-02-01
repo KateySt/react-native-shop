@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, useColorScheme } from 'react-native';
+import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Slider } from '@/components/Slider';
@@ -13,7 +13,9 @@ const CarouselScreen: React.FC = () => {
   ];
   return (
     <SafeAreaView style={screenBackgroundStyle}>
-      <Slider />
+      <ScrollView>
+        <Slider />
+      </ScrollView>
     </SafeAreaView>
   );
 };
