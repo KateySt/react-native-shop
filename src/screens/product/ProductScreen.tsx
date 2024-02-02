@@ -1,19 +1,11 @@
 import React, { useEffect } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Image,
-  PanResponder,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Animated, Dimensions, Image, PanResponder, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch } from '@/app/store';
+import { StarRating } from '@/components/StarRating';
 import { getProductAsync, selectProduct } from '@/features/product/productSlice';
+import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const panY = new Animated.Value(0);
@@ -23,12 +15,9 @@ const ProductScreen: React.FC = ({ route }: any) => {
   const { productId } = route.params;
   const product = useSelector(selectProduct);
   const dispatch: AppDispatch = useDispatch();
-  const isDark = useColorScheme() === 'dark';
-  const modalStyle = [
-    styles.modalContainer,
-    { backgroundColor: isDark ? COLORS.primaryBlackHex : COLORS.primaryWhiteHex },
-  ];
-  const textStyle = { color: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex };
+  const { background, text } = useAdaptation();
+  const modalStyle = [styles.modalContainer, { backgroundColor: background }];
+  const textStyle = { color: text };
   useEffect(() => {
     dispatch(getProductAsync(productId));
   }, [productId]);
@@ -78,14 +67,7 @@ const ProductScreen: React.FC = ({ route }: any) => {
                   </View>
                 )}
                 <View style={styles.ratingContainer}>
-                  {/*<StarRating
-                    disabled
-                    maxStars={5}
-                    rating={product.rating.rate}
-                    starSize={25}
-                    fullStarColor={COLORS.primaryYellowHex}
-                    emptyStarColor={isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex}
-                  />*/}
+                  <StarRating rating={product.rating.rate} />
                   <Text style={[styles.ratingText, textStyle]}>({product.rating.count} ratings)</Text>
                 </View>
               </View>

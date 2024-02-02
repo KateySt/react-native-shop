@@ -28,6 +28,10 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
           iconName = focused ? 'play' : 'stop';
           break;
         }
+        case 'Home': {
+          iconName = focused ? 'home' : 'home-outline';
+          break;
+        }
       }
 
       return <Ionicons name={iconName} size={size} color={color} />;

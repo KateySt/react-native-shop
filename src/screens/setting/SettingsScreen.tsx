@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, useColorScheme } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
+import { useAdaptation } from '@/hooks/useAdaptation';
+import { FONTSIZE, SPACING } from '@/theme/theme';
 
 const SettingsScreen = () => {
-  const isDark = useColorScheme() === 'dark';
-  const screenTitleStyle = [styles.screenTitle, { color: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex }];
+  const { icon } = useAdaptation();
+  const screenTitleStyle = [styles.screenTitle, { color: icon }];
 
   return (
     <View style={styles.container}>

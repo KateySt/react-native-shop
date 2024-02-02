@@ -1,14 +1,13 @@
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
 
+import { useAdaptation } from '@/hooks/useAdaptation';
 import { DrawerGroup } from '@/navigation/drawer';
 
 export const Navigation = () => {
-  const isDark = useColorScheme() === 'dark';
-
+  const { theme } = useAdaptation();
   return (
-    <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+    <NavigationContainer theme={theme}>
       <StatusBar style="auto" />
       <DrawerGroup />
     </NavigationContainer>

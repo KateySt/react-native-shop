@@ -11,6 +11,7 @@ export type TabParamList = {
   Products: undefined;
   Profile: undefined;
   Carousel: undefined;
+  Home: undefined;
 };
 
 export type TabsGroupProps = CompositeScreenProps<

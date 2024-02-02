@@ -1,17 +1,15 @@
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
-import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
+import { useAdaptation } from '@/hooks/useAdaptation';
+import { FONTSIZE, SPACING } from '@/theme/theme';
 
 const ProfileScreen = () => {
-  const isDark = useColorScheme() === 'dark';
-  const textStyle = { color: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex };
-
-  const screenTitleStyle = [styles.screenTitle, textStyle];
-
+  const { text } = useAdaptation();
+  const textStyle = { color: text };
   return (
     <View style={styles.container}>
-      <Text style={screenTitleStyle}>Profile Screen</Text>
+      <Text style={[styles.screenTitle, textStyle]}>Profile Screen</Text>
       <Text style={textStyle}>Name: John Doe</Text>
       <PressableComponent>
         <Text style={textStyle}>Edit Profile</Text>

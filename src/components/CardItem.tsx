@@ -1,39 +1,40 @@
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
+import { useAdaptation } from '@/hooks/useAdaptation';
+import { useOrientation } from '@/hooks/useOrientation';
+import { useScreenDimensions } from '@/hooks/useScreenDimensions';
 import { CartItemProps } from '@/interface/CartItemProps';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
-const windowWidth = Dimensions.get('window').width;
-const numColumns = windowWidth > 600 ? 3 : 1;
-const columnWidth = (windowWidth - SPACING.space_20 * (numColumns + 1)) / numColumns;
 const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description }) => {
-  const isDark = useColorScheme() === 'dark';
-  const screenCardStyle = [
-    styles.card,
-    { backgroundColor: isDark ? COLORS.primaryDarkGreyHex : COLORS.primaryDarkWhiteHex },
-    { shadowColor: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex },
-  ];
-  const defaultTextColor = [{ color: isDark ? COLORS.secondaryLightGreyHex : COLORS.secondaryBlackRGBA }];
-  const shoppingCartColor = isDark ? COLORS.primaryWhiteHex : COLORS.secondaryBlackRGBA;
+  const screenDimensions = useScreenDimensions();
+  const orientation = useOrientation();
+
+  const windowWidth = screenDimensions.width;
+  const numColumns = orientation === 'landscape' && windowWidth > 600 ? 2 : 1;
+  const columnWidth = (windowWidth - SPACING.space_20 * (numColumns + 1)) / numColumns;
+
+  const { background, text, icon } = useAdaptation();
+  const screenCardStyle = [styles.card, { backgroundColor: background }, { shadowColor: icon }];
   return (
-    <View style={styles.cardContainer}>
+    <View style={[styles.cardContainer, { width: columnWidth }]}>
       <View style={screenCardStyle}>
         <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.textContainer}>
-          <Text style={[styles.name, defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
+          <Text style={[styles.name, { color: text }]} numberOfLines={2} ellipsizeMode="tail">
             {name}
           </Text>
-          <Text style={[styles.price, defaultTextColor]}>${prices}</Text>
-          <Text style={[styles.description, defaultTextColor]} numberOfLines={2} ellipsizeMode="tail">
+          <Text style={[styles.price, { color: text }]}>${prices}</Text>
+          <Text style={[styles.description, { color: text }]} numberOfLines={2} ellipsizeMode="tail">
             {description}
           </Text>
         </View>
         <View style={styles.iconsContainer}>
           <PressableComponent>
-            <Entypo name="shopping-cart" size={20} color={shoppingCartColor} />
+            <Entypo name="shopping-cart" size={20} color={icon} />
           </PressableComponent>
           <PressableComponent>
             <Ionicons name="heart" size={20} color={COLORS.primaryRedHex} />
@@ -47,7 +48,6 @@ const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description })
 const styles = StyleSheet.create({
   cardContainer: {
     margin: SPACING.space_10,
-    width: columnWidth,
   },
   card: {
     shadowOffset: { width: 0, height: 6 },

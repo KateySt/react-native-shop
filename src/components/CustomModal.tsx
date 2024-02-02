@@ -1,21 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Modal, StyleSheet, Text, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
+import { useAdaptation } from '@/hooks/useAdaptation';
 import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const CustomModal: React.FC = ({ route }: any) => {
+  const { background, text } = useAdaptation();
   const visible = route?.params;
-  const isDark = useColorScheme() === 'dark';
-  const [isVisible, setIsVisible] = useState<boolean>(false); // Set initial state to false
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const navigation = useNavigation();
-  const screenModalStyle = [
-    styles.modalContent,
-    { backgroundColor: isDark ? COLORS.primaryDarkGreyHex : COLORS.primaryDarkWhiteHex },
-  ];
-  const defaultTextColor = { color: isDark ? COLORS.primaryWhiteHex : COLORS.primaryDarkGreyHex };
+  const screenModalStyle = [styles.modalContent, { backgroundColor: background }];
+  const defaultTextColor = { color: text };
 
   useEffect(() => {
     setIsVisible(!!visible);
