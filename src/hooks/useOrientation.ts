@@ -16,6 +16,10 @@ const useOrientation = (): Orientation => {
 
   useEffect(() => {
     Dimensions.addEventListener('change', handleOrientationChange);
+
+    return () => {
+      Dimensions.removeEventListener('change', handleOrientationChange);
+    };
   }, []);
 
   return orientation;

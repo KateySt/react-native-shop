@@ -14,3 +14,8 @@ export const heartScreenOptions: NativeStackNavigationOptions = {
   presentation: 'modal',
   headerTitle: '',
 };
+
+export const categoryScreenOptions: NativeStackNavigationOptions = {
+  presentation: 'modal',
+  headerTitle: '',
+};

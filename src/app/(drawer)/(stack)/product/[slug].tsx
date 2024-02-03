@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Animated, Dimensions, Image, PanResponder, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { PressableComponent } from '@/components/PressableComponent';
 import StarRating from '@/components/StarRating';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductAsync, selectProduct } from '@/features/product/productSlice';
@@ -20,6 +21,9 @@ const ProductScreen: React.FC = () => {
   const modalStyle = [styles.modalContainer, { backgroundColor: background }];
   const textStyle = { color: text };
   const router = useRouter();
+  const handlePressCategory = (category: string) => {
+    router.push(`/(drawer)/(stack)/categories/${category}`);
+  };
 
   useEffect(() => {
     dispatch(getProductAsync(slug));
@@ -44,7 +48,6 @@ const ProductScreen: React.FC = () => {
     <View style={styles.container}>
       {product && (
         <>
-          {' '}
           <Image source={{ uri: product.image }} style={styles.image} />
           <Animated.View
             {...panResponder.panHandlers}
@@ -66,9 +69,11 @@ const ProductScreen: React.FC = () => {
                 {product.category && (
                   <View style={styles.categoryContainer}>
                     <Text style={[styles.categoryText, textStyle]}>Categories:</Text>
-                    <View style={styles.categoryTextContainer}>
+                    <PressableComponent
+                      style={styles.categoryTextContainer}
+                      onPress={() => handlePressCategory(product.category)}>
                       <Text style={styles.categoryText}>{product.category}</Text>
-                    </View>
+                    </PressableComponent>
                   </View>
                 )}
                 <View style={styles.ratingContainer}>
