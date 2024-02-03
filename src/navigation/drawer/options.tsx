@@ -8,3 +8,11 @@ export const drawerScreenOptions: ComponentProps<typeof Drawer>['screenOptions']
   drawerActiveTintColor: COLORS.primaryVioletHex,
   drawerInactiveTintColor: COLORS.primaryLightGreyHex,
 };
+
+export const homeScreenOptions = {
+  drawerLabel: 'Home',
+};
+
+export const settingsScreenOptions = {
+  drawerLabel: 'Settings',
+};

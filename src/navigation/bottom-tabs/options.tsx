@@ -1,15 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
 import { ComponentProps } from 'react';
 
+import { ExploreHeaderLeft } from '@/components/ExploreHeaderLeft';
+import { TabScreenOptions } from '@/navigation/bottom-tabs/type';
 import { COLORS } from '@/theme/theme';
 
-export const tabScreenOptions: ComponentProps<typeof Tabs>['screenOptions'] = ({ route }) => {
+export const tabScreenOptions: TabScreenOptions = ({ route }) => {
   const routeName = route.name;
 
   return {
     tabBarActiveTintColor: COLORS.primaryVioletHex,
     tabBarInactiveTintColor: COLORS.primaryLightGreyHex,
+    tabBarLabel: '',
     headerShown: false,
     tabBarIcon: ({ color, size, focused }) => {
       let iconName: ComponentProps<typeof Ionicons>['name'] = 'alert';
@@ -36,4 +38,21 @@ export const tabScreenOptions: ComponentProps<typeof Tabs>['screenOptions'] = ({
       return <Ionicons name={iconName} size={size} color={color} />;
     },
   };
+};
+
+export const productsScreenOptions = {
+  tabBarLabel: 'Products',
+};
+
+export const carouselScreenOptions = {
+  tabBarLabel: 'Carousel',
+};
+
+export const profileScreenOptions = {
+  headerLeft: ExploreHeaderLeft,
+  headerShown: true,
+  headerStyle: {
+    height: 0,
+  },
+  tabBarLabel: 'Profile',
 };

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import { store } from '@/features/store';
 import { useAdaptation } from '@/hooks/useAdaptation';
-import { drawerScreenOptions } from '@/navigation/drawer/options';
+import { drawerScreenOptions, homeScreenOptions, settingsScreenOptions } from '@/navigation/drawer/options';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -19,18 +19,8 @@ export default function Layout() {
         <StatusBar style="auto" />
         <GestureHandlerRootView style={styles.container}>
           <Drawer screenOptions={drawerScreenOptions}>
-            <Drawer.Screen
-              name="(drawer)/(stack)"
-              options={{
-                drawerLabel: 'Home',
-              }}
-            />
-            <Drawer.Screen
-              name="(drawer)/settings"
-              options={{
-                drawerLabel: 'Settings',
-              }}
-            />
+            <Drawer.Screen name="(drawer)/(stack)" options={homeScreenOptions} />
+            <Drawer.Screen name="(drawer)/settings" options={settingsScreenOptions} />
           </Drawer>
         </GestureHandlerRootView>
       </Provider>
