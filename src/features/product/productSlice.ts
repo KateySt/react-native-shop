@@ -1,16 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { WritableDraft } from 'immer/src/types/types-external';
 
-import { fetchProduct, fetchProducts } from '@/api/productApi';
-import type { RootState } from '@/app/store';
+import { fetchProductByCategory, fetchProductById, fetchProducts } from '@/api/productApi';
+import type { AppDispatch, RootState } from '@/features/store';
 import { Product } from '@/interface/Product';
 
 export interface ProductState {
   products: Product[];
+  productsByCategory: Product[];
   product: any;
 }
 
 const initialState: ProductState = {
   products: [],
+  productsByCategory: [],
   product: null,
 };
 
@@ -18,36 +21,40 @@ export const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    getProducts: (state, action: PayloadAction<Product>) => {
-      state.products.push(action.payload);
-    },
-    setProduct: (state, action: PayloadAction<Product[]>) => {
+    setProducts: (state: WritableDraft<ProductState>, action: PayloadAction<Product[]>) => {
       state.products = action.payload;
     },
-    getProduct: (state, action: PayloadAction<Product>) => {
+    setProductsByCategory: (state: WritableDraft<ProductState>, action: PayloadAction<Product[]>) => {
+      state.productsByCategory = action.payload;
+    },
+    setProduct: (state: WritableDraft<ProductState>, action: PayloadAction<Product>) => {
       state.product = action.payload;
     },
   },
 });
 
-export const { getProducts, setProduct, getProduct } = productSlice.actions;
+export const { setProducts, setProduct, setProductsByCategory } = productSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products.products;
+export const selectProductsByCategory = (state: RootState) => state.products.productsByCategory;
 export const selectProduct = (state: RootState) => state.products.product;
-export const getProductsAsync = () => async (dispatch: (arg0: PayloadAction<Product>) => void) => {
-  await fetchProducts().then((el) => dispatch(getProducts(el)));
+export const getProductsAsync = () => async (dispatch: AppDispatch) => {
+  await fetchProducts().then((el: Product[]) => dispatch(setProducts(el)));
 };
 
-export const setProductsAsync = (newData?: Product[]) => async (dispatch: (arg0: PayloadAction<Product[]>) => void) => {
+export const getProductsByCategoryAsync = (category: string) => async (dispatch: AppDispatch) => {
+  await fetchProductByCategory(category).then((el: Product[]) => dispatch(setProductsByCategory(el)));
+};
+export const setProductsAsync = (newData?: Product[]) => async (dispatch: AppDispatch) => {
   if (newData) {
-    dispatch(setProduct(newData));
+    dispatch(setProducts(newData));
   } else {
-    await fetchProducts().then((el) => dispatch(setProduct(el)));
+    await fetchProducts().then((el: Product[]) => dispatch(setProducts(el)));
   }
 };
 
-export const getProductAsync = (id: number | string) => async (dispatch: (arg0: PayloadAction<Product>) => void) => {
-  await fetchProduct(id).then((el) => dispatch(getProduct(el)));
+export const getProductAsync = (id: number | string) => async (dispatch: AppDispatch) => {
+  await fetchProductById(id).then((el: Product) => dispatch(setProduct(el)));
 };
 
 export default productSlice.reducer;

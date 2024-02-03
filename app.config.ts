@@ -2,6 +2,8 @@ import 'ts-node/register';
 import { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
+  plugins: ['expo-router'],
+  scheme: 'your-app-scheme',
   name: 'shop',
   slug: 'shop',
   version: '1.0.0',
@@ -29,6 +31,7 @@ const config: ExpoConfig = {
   },
   experiments: {
     tsconfigPaths: true,
+    typedRoutes: true,
   },
 };
 

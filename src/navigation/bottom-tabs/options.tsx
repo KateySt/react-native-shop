@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ComponentProps } from 'react';
 
-import { ExploreHeaderLeft } from '@/navigation/bottom-tabs/components/ExploreHeaderLeft';
-import { TabScreenOptions } from '@/navigation/bottom-tabs/types';
+import { ExploreHeaderLeft } from '@/components/ExploreHeaderLeft';
+import { TabScreenOptions } from '@/navigation/bottom-tabs/type';
 import { COLORS } from '@/theme/theme';
 
 export const tabScreenOptions: TabScreenOptions = ({ route }) => {
@@ -11,21 +11,26 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
   return {
     tabBarActiveTintColor: COLORS.primaryVioletHex,
     tabBarInactiveTintColor: COLORS.primaryLightGreyHex,
+    tabBarLabel: '',
     headerShown: false,
     tabBarIcon: ({ color, size, focused }) => {
       let iconName: ComponentProps<typeof Ionicons>['name'] = 'alert';
 
       switch (routeName) {
-        case 'Products': {
+        case 'products': {
           iconName = focused ? 'albums' : 'albums-outline';
           break;
         }
-        case 'Profile': {
+        case 'profile': {
           iconName = focused ? 'person-circle' : 'person-circle-outline';
           break;
         }
-        case 'Carousel': {
+        case 'carousel': {
           iconName = focused ? 'play' : 'stop';
+          break;
+        }
+        case 'home': {
+          iconName = focused ? 'home' : 'home-outline';
           break;
         }
       }
@@ -35,11 +40,19 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
   };
 };
 
-export const exploreScreenOptions: TabScreenOptions = {
+export const productsScreenOptions = {
+  tabBarLabel: 'Products',
+};
+
+export const carouselScreenOptions = {
+  tabBarLabel: 'Carousel',
+};
+
+export const profileScreenOptions = {
   headerLeft: ExploreHeaderLeft,
-  headerTitle: '',
   headerShown: true,
   headerStyle: {
     height: 0,
   },
+  tabBarLabel: 'Profile',
 };

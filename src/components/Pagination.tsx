@@ -1,14 +1,15 @@
 import React from 'react';
-import { Animated, Dimensions, StyleSheet, useColorScheme, View } from 'react-native';
+import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 
+import { useAdaptation } from '@/hooks/useAdaptation';
 import { PaginationProps } from '@/interface/PaginationProps';
-import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
+import { BORDERRADIUS, SPACING } from '@/theme/theme';
 
 const { width } = Dimensions.get('screen');
 
 const Pagination: React.FC<PaginationProps> = ({ data, scrollX, index }) => {
-  const isDark = useColorScheme() === 'dark';
-  const dotStyle = { backgroundColor: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex };
+  const { icon } = useAdaptation();
+  const dotStyle = { backgroundColor: icon };
 
   return (
     <View style={styles.container}>
@@ -34,10 +35,9 @@ const Pagination: React.FC<PaginationProps> = ({ data, scrollX, index }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    flex: 1,
     bottom: SPACING.space_36,
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Pagination };
+export default Pagination;
