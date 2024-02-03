@@ -1,35 +1,37 @@
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useScrollToTop } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, FlatList, ListRenderItem, Pressable, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
+import { ActivityIndicator, FlatList, ListRenderItem, Pressable, StyleSheet, View } from 'react-native';
 
-import { AppDispatch } from '@/app/store';
-import { CardItem } from '@/components/CardItem';
-import { SearchBar } from '@/components/SearchBar';
+import CardItem from '@/components/CardItem';
+import SearchBar from '@/components/SearchBar';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductsAsync, selectProducts, setProductsAsync } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useOrientation } from '@/hooks/useOrientation';
 import { Product } from '@/interface/Product';
-import { HomeStackParamList } from '@/navigation/native-stack/types';
-import { SPACING } from '@/theme/theme';
+import { COLORS, SPACING } from '@/theme/theme';
 
 const ProductsScreen: React.FC = () => {
   const orientation = useOrientation();
   const numColumns = orientation === 'landscape' ? 2 : 1;
-  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [text, setText] = useState<string>('');
-  const products = useSelector(selectProducts);
-  const dispatch: AppDispatch = useDispatch();
+  const products = useAppSelector(selectProducts);
+  const dispatch = useAppDispatch();
   const { background } = useAdaptation();
   const screenBackgroundStyle = [styles.safeArea, { backgroundColor: background }];
   const ref = useRef<FlatList>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const handlePress = (item: Product) => {
+    router.push(`/(drawer)/(stack)/product/${item.id}`);
+  };
 
   useScrollToTop(ref);
 
   useEffect(() => {
     dispatch(getProductsAsync());
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -40,10 +42,6 @@ const ProductsScreen: React.FC = () => {
     }
   }, [text]);
 
-  const handlePress = (item: Product) => {
-    navigation.navigate('ProductScreen', { productId: `${item.id}` });
-  };
-
   const getItems: ListRenderItem<Product> = ({ item }) => {
     if (!item || !item.id) return null;
     return (
@@ -53,19 +51,29 @@ const ProductsScreen: React.FC = () => {
     );
   };
 
+  if (loading) {
+    return (
+      <View style={screenBackgroundStyle}>
+        <ActivityIndicator size="large" color={COLORS.primaryVioletHex} />
+      </View>
+    );
+  }
+
   return (
-    <SafeAreaView style={screenBackgroundStyle}>
-      <SearchBar text={setText} />
+    <View style={screenBackgroundStyle}>
       {products && (
-        <FlatList
-          ref={ref}
-          style={styles.listItemContainer}
-          data={products}
-          renderItem={getItems}
-          numColumns={numColumns}
-        />
+        <>
+          <SearchBar text={setText} />
+          <FlatList
+            ref={ref}
+            style={styles.listItemContainer}
+            data={products}
+            renderItem={getItems}
+            numColumns={numColumns}
+          />
+        </>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -83,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ProductsScreen };
+export default ProductsScreen;

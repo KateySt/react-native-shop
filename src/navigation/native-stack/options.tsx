@@ -1,15 +1,16 @@
-import { HomeStackScreenOptions } from '@/navigation/native-stack/types';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Stack } from 'expo-router';
+import { ComponentProps } from 'react';
 
-export const homeStackScreenOptions: HomeStackScreenOptions = {
+export const homeStackScreenOptions: ComponentProps<typeof Stack>['screenOptions'] = {
   headerShown: false,
 };
 
-export const productScreenOptions: HomeStackScreenOptions = {
+export const productScreenOptions: NativeStackNavigationOptions = {
   presentation: 'modal',
   headerTitle: '',
-  headerShown: true,
 };
-export const heartScreenOptions: HomeStackScreenOptions = {
+export const heartScreenOptions: NativeStackNavigationOptions = {
   presentation: 'modal',
   headerTitle: '',
 };

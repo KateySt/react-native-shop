@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { StarRating };
+export default StarRating;

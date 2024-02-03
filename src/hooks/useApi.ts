@@ -9,7 +9,7 @@ interface ApiResponse<T> {
 const useApi = <T>(url: string): ApiResponse<T> => {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -19,8 +19,10 @@ const useApi = <T>(url: string): ApiResponse<T> => {
         const response = await fetch(url, { signal: abortController.signal });
         const result = await response.json();
         setData(result);
-      } catch (err) {
-        setError(err);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err);
+        }
       } finally {
         setIsLoading(false);
       }

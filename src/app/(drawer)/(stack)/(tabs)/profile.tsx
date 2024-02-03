@@ -1,15 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { PressableComponent } from '@/components/PressableComponent';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { FONTSIZE, SPACING } from '@/theme/theme';
 
-const SettingsScreen = () => {
-  const { icon } = useAdaptation();
-  const screenTitleStyle = [styles.screenTitle, { color: icon }];
-
+const ProfileScreen = () => {
+  const { text } = useAdaptation();
+  const textStyle = { color: text };
   return (
     <View style={styles.container}>
-      <Text style={screenTitleStyle}>Settings Screen</Text>
+      <Text style={[styles.screenTitle, textStyle]}>Profile Screen</Text>
+      <Text style={textStyle}>Name: John Doe</Text>
+      <PressableComponent>
+        <Text style={textStyle}>Edit Profile</Text>
+      </PressableComponent>
     </View>
   );
 };
@@ -25,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { SettingsScreen };
+export default ProfileScreen;

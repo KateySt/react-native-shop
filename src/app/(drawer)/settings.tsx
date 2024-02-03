@@ -1,19 +1,23 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { FONTSIZE, SPACING } from '@/theme/theme';
 
-const HomeScreen = () => {
+const SettingsScreen = () => {
   const { icon } = useAdaptation();
   const screenTitleStyle = [styles.screenTitle, { color: icon }];
-
+  const router = useRouter();
   return (
     <View style={styles.container}>
-      <Text style={screenTitleStyle}>Home Screen</Text>
+      <Ionicons name="caret-back" size={24} color={icon} onPress={router.back} />
+      <Text style={screenTitleStyle}>Settings Screen</Text>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     padding: SPACING.space_16,
@@ -24,4 +28,5 @@ const styles = StyleSheet.create({
     marginTop: SPACING.space_8,
   },
 });
-export { HomeScreen };
+
+export default SettingsScreen;

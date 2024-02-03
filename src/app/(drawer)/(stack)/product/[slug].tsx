@@ -1,9 +1,10 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Animated, Dimensions, Image, PanResponder, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { AppDispatch } from '@/app/store';
-import { StarRating } from '@/components/StarRating';
+import StarRating from '@/components/StarRating';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductAsync, selectProduct } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
@@ -11,16 +12,18 @@ import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 const panY = new Animated.Value(0);
 const screenHeight = Dimensions.get('window').height;
 const initialHeight = screenHeight * 0.7;
-const ProductScreen: React.FC = ({ route }: any) => {
-  const { productId } = route.params;
-  const product = useSelector(selectProduct);
-  const dispatch: AppDispatch = useDispatch();
-  const { background, text } = useAdaptation();
+const ProductScreen: React.FC = () => {
+  const { slug } = useLocalSearchParams<{ slug: string }>();
+  const product = useAppSelector(selectProduct);
+  const dispatch = useAppDispatch();
+  const { background, text, icon } = useAdaptation();
   const modalStyle = [styles.modalContainer, { backgroundColor: background }];
   const textStyle = { color: text };
+  const router = useRouter();
+
   useEffect(() => {
-    dispatch(getProductAsync(productId));
-  }, [productId]);
+    dispatch(getProductAsync(slug));
+  }, [slug]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -41,6 +44,7 @@ const ProductScreen: React.FC = ({ route }: any) => {
     <View style={styles.container}>
       {product && (
         <>
+          {' '}
           <Image source={{ uri: product.image }} style={styles.image} />
           <Animated.View
             {...panResponder.panHandlers}
@@ -56,6 +60,7 @@ const ProductScreen: React.FC = ({ route }: any) => {
             ]}>
             <ScrollView>
               <View>
+                <Ionicons name="caret-back" size={24} color={icon} onPress={router.back} />
                 <Text style={[styles.name, textStyle]}>{product.title}</Text>
                 <Text style={[styles.description, textStyle]}>{product.description}</Text>
                 {product.category && (
@@ -126,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ProductScreen };
+export default ProductScreen;

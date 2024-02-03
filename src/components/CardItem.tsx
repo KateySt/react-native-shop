@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { CardItem };
+export default CardItem;

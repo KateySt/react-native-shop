@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Pagination };
+export default Pagination;

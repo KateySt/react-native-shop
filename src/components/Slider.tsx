@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native';
 
-import { Pagination } from '@/components/Pagination';
-import { SlideItem } from '@/components/SlideItem';
+import Pagination from '@/components/Pagination';
+import SlideItem from '@/components/SlideItem';
 import { Product } from '@/interface/Product';
 
 const Slider: React.FC<{ data: Product[] }> = ({ data }) => {
@@ -72,4 +72,4 @@ const Slider: React.FC<{ data: Product[] }> = ({ data }) => {
   );
 };
 
-export { Slider };
+export default Slider;

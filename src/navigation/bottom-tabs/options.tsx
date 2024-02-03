@@ -1,11 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 import { ComponentProps } from 'react';
 
-import { ExploreHeaderLeft } from '@/navigation/bottom-tabs/components/ExploreHeaderLeft';
-import { TabScreenOptions } from '@/navigation/bottom-tabs/types';
 import { COLORS } from '@/theme/theme';
 
-export const tabScreenOptions: TabScreenOptions = ({ route }) => {
+export const tabScreenOptions: ComponentProps<typeof Tabs>['screenOptions'] = ({ route }) => {
   const routeName = route.name;
 
   return {
@@ -16,19 +15,19 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
       let iconName: ComponentProps<typeof Ionicons>['name'] = 'alert';
 
       switch (routeName) {
-        case 'Products': {
+        case 'products': {
           iconName = focused ? 'albums' : 'albums-outline';
           break;
         }
-        case 'Profile': {
+        case 'profile': {
           iconName = focused ? 'person-circle' : 'person-circle-outline';
           break;
         }
-        case 'Carousel': {
+        case 'carousel': {
           iconName = focused ? 'play' : 'stop';
           break;
         }
-        case 'Home': {
+        case 'home': {
           iconName = focused ? 'home' : 'home-outline';
           break;
         }
@@ -37,13 +36,4 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
       return <Ionicons name={iconName} size={size} color={color} />;
     },
   };
-};
-
-export const exploreScreenOptions: TabScreenOptions = {
-  headerLeft: ExploreHeaderLeft,
-  headerTitle: '',
-  headerShown: true,
-  headerStyle: {
-    height: 0,
-  },
 };

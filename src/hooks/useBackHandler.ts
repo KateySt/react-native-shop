@@ -1,22 +1,16 @@
 import { useEffect } from 'react';
 import { BackHandler } from 'react-native';
 
-const useBackHandler = (onBackPress: any) => {
+const useBackHandler = (callback: () => boolean) => {
   useEffect(() => {
-    const handleBackPress = () => {
-      if (onBackPress && typeof onBackPress === 'function') {
-        onBackPress();
-        return true;
-      }
-      return false;
-    };
+    const handleBackPress = () => callback();
 
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
     };
-  }, [onBackPress]);
+  }, [callback]);
 };
 
 export { useBackHandler };
