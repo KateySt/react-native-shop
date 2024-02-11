@@ -1,6 +1,7 @@
 import { DarkTheme, DefaultTheme, Theme } from '@react-navigation/native';
-import { useColorScheme } from 'react-native';
 
+import { useAppSelector } from '@/features/hooks';
+import { selectTheme } from '@/features/ui/uiSlice';
 import { COLORS } from '@/theme/theme';
 
 interface AdaptationStyles {
@@ -12,14 +13,14 @@ interface AdaptationStyles {
 }
 
 const useAdaptation = (): AdaptationStyles => {
-  const isDark = useColorScheme() === 'dark';
+  const theme = useAppSelector(selectTheme);
 
   return {
-    background: isDark ? COLORS.primaryDarkGreyHex : COLORS.primaryWhiteHex,
-    text: isDark ? COLORS.primaryWhiteHex : COLORS.primaryDarkGreyHex,
-    icon: isDark ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex,
-    borderColor: isDark ? COLORS.secondaryLightGreyHex : COLORS.primaryBlackHex,
-    theme: isDark ? DarkTheme : DefaultTheme,
+    background: theme === 'dark' ? COLORS.primaryBlackHex : COLORS.primaryWhiteHex,
+    text: theme === 'dark' ? COLORS.primaryWhiteHex : COLORS.primaryDarkGreyHex,
+    icon: theme === 'dark' ? COLORS.primaryWhiteHex : COLORS.primaryBlackHex,
+    borderColor: theme === 'dark' ? COLORS.secondaryLightGreyHex : COLORS.primaryBlackHex,
+    theme: theme === 'dark' ? DarkTheme : DefaultTheme,
   };
 };
 

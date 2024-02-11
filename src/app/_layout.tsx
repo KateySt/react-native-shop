@@ -12,22 +12,29 @@ import { drawerScreenOptions, homeScreenOptions, settingsScreenOptions } from '@
 
 export { ErrorBoundary } from 'expo-router';
 
-export default function Layout() {
+const LayoutContent = () => {
   const { theme } = useAdaptation();
+
   return (
     <ThemeProvider value={theme}>
-      <SessionProvider>
-        <Provider store={store}>
-          <StatusBar style="auto" />
-          <GestureHandlerRootView style={styles.container}>
-            <Drawer screenOptions={drawerScreenOptions}>
-              <Drawer.Screen name="(drawer)/(stack)" options={homeScreenOptions} />
-              <Drawer.Screen name="(drawer)/settings" options={settingsScreenOptions} />
-            </Drawer>
-          </GestureHandlerRootView>
-        </Provider>
-      </SessionProvider>
+      <StatusBar style="auto" />
+      <GestureHandlerRootView style={styles.container}>
+        <Drawer screenOptions={drawerScreenOptions}>
+          <Drawer.Screen name="(drawer)/(stack)" options={homeScreenOptions} />
+          <Drawer.Screen name="(drawer)/settings" options={settingsScreenOptions} />
+        </Drawer>
+      </GestureHandlerRootView>
     </ThemeProvider>
+  );
+};
+
+export default function Layout() {
+  return (
+    <SessionProvider>
+      <Provider store={store}>
+        <LayoutContent />
+      </Provider>
+    </SessionProvider>
   );
 }
 
