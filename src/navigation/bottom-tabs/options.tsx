@@ -7,7 +7,6 @@ import { COLORS } from '@/theme/theme';
 
 export const tabScreenOptions: TabScreenOptions = ({ route }) => {
   const routeName = route.name;
-
   return {
     tabBarActiveTintColor: COLORS.primaryVioletHex,
     tabBarInactiveTintColor: COLORS.primaryLightGreyHex,
