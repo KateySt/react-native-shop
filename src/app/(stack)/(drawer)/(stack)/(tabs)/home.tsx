@@ -91,6 +91,7 @@ const HomeScreen: React.FC = () => {
           disabled={disabled}>
           <Text style={{ color: icon }}>New Game</Text>
         </PressableComponent>
+        <Text style={{ color: icon }}>Turns: {turns}</Text>
         <View style={styles.cardGrid}>
           {cards.map((card, id) => (
             <SingleCard
@@ -102,7 +103,6 @@ const HomeScreen: React.FC = () => {
             />
           ))}
         </View>
-        <Text style={{ color: icon }}>Turns: {turns}</Text>
       </View>
     </ScrollView>
   );
