@@ -23,7 +23,7 @@ const Heart: React.FC = () => {
   ];
   const router = useRouter();
   const likes = useAppSelector(selectLikes);
-  console.log(likes);
+
   return (
     <View style={screenModalStyle}>
       <Ionicons name="caret-back" size={24} color={icon} onPress={router.back} />
