@@ -9,12 +9,14 @@ export interface ProductState {
   products: Product[];
   productsByCategory: Product[];
   product: any;
+  like: Product[];
 }
 
 const initialState: ProductState = {
   products: [],
   productsByCategory: [],
   product: null,
+  like: [],
 };
 
 export const productSlice = createSlice({
@@ -30,12 +32,16 @@ export const productSlice = createSlice({
     setProduct: (state: WritableDraft<ProductState>, action: PayloadAction<Product>) => {
       state.product = action.payload;
     },
+    setLike: (state: WritableDraft<ProductState>, action: PayloadAction<Product[]>) => {
+      state.like = action.payload;
+    },
   },
 });
 
-export const { setProducts, setProduct, setProductsByCategory } = productSlice.actions;
+export const { setLike, setProducts, setProduct, setProductsByCategory } = productSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products.products;
+export const selectLikes = (state: RootState) => state.products.like;
 export const selectProductsByCategory = (state: RootState) => state.products.productsByCategory;
 export const selectProduct = (state: RootState) => state.products.product;
 export const getProductsAsync = () => async (dispatch: AppDispatch) => {

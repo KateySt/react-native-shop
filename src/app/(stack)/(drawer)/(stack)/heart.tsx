@@ -1,15 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
+import ListCardItems from '@/components/ListCardItems';
+import { useAppSelector } from '@/features/hooks';
+import { selectLikes } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useScreenDimensions } from '@/hooks/useScreenDimensions';
 import { FONTSIZE, SPACING } from '@/theme/theme';
 
 const Heart: React.FC = () => {
   const dimensions = useScreenDimensions();
-  const { background, text, icon } = useAdaptation();
+  const { background, icon } = useAdaptation();
   const screenModalStyle = [
     styles.container,
     {
@@ -18,15 +21,13 @@ const Heart: React.FC = () => {
       height: dimensions.height,
     },
   ];
-  const defaultTextColor = { color: text };
   const router = useRouter();
-
+  const likes = useAppSelector(selectLikes);
+  console.log(likes);
   return (
     <View style={screenModalStyle}>
       <Ionicons name="caret-back" size={24} color={icon} onPress={router.back} />
-      <View>
-        <Text style={[styles.text, defaultTextColor]}>Close me !</Text>
-      </View>
+      <ListCardItems data={likes} />
     </View>
   );
 };
@@ -34,7 +35,6 @@ const Heart: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
   },
   text: {
     fontSize: FONTSIZE.size_16,

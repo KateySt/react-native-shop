@@ -1,8 +1,10 @@
 import { Entypo, Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { selectLikes, selectProduct, setLike } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useOrientation } from '@/hooks/useOrientation';
 import { useScreenDimensions } from '@/hooks/useScreenDimensions';
@@ -19,6 +21,27 @@ const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description })
 
   const { background, text, icon } = useAdaptation();
   const screenCardStyle = [styles.card, { backgroundColor: background }, { shadowColor: icon }];
+  const dispatch = useAppDispatch();
+  const likes = useAppSelector(selectLikes);
+
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    const isProductLiked = likes.some((item) => item.title === name);
+    setIsLiked(isProductLiked);
+  }, [likes, name]);
+
+  const handleLikeToggle = useCallback(() => {
+    const isProductLiked = likes.some((item) => item.title === name);
+    if (isProductLiked) {
+      const updatedCart = likes.filter((item) => item.title !== name);
+      dispatch(setLike(updatedCart));
+    } else {
+      dispatch(setLike([...likes, { title: name, image, price: prices, description }]));
+    }
+    setIsLiked(!isProductLiked);
+  }, [isLiked, likes]);
+
   return (
     <View style={[styles.cardContainer, { width: columnWidth }]}>
       <View style={screenCardStyle}>
@@ -36,8 +59,8 @@ const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description })
           <PressableComponent>
             <Entypo name="shopping-cart" size={20} color={icon} />
           </PressableComponent>
-          <PressableComponent>
-            <Ionicons name="heart" size={20} color={COLORS.primaryRedHex} />
+          <PressableComponent onPress={handleLikeToggle}>
+            <Ionicons name="heart" size={20} color={isLiked ? COLORS.primaryVioletHex : COLORS.primaryRedHex} />
           </PressableComponent>
         </View>
       </View>
