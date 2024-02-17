@@ -18,6 +18,7 @@ type Name = {
 
 export type User = {
   id: number;
+  image: string;
   email: string;
   username: string;
   password: string;

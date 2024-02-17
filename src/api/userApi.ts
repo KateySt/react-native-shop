@@ -22,7 +22,7 @@ export async function fetchUser(id: number | string): Promise<User> {
   return await fetch(HOST + '/users/' + id).then((res) => res.json());
 }
 
-export async function fetchCreatUser(user: User): Promise<User> {
+export async function fetchCreatUser(user: { username: string; password: string; email: string }): Promise<User> {
   return await fetch(HOST + '/users', {
     method: 'POST',
     headers: {

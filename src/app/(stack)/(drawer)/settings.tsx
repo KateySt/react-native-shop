@@ -21,7 +21,7 @@ const SettingsScreen = () => {
   return (
     <View style={styles.container}>
       <Ionicons name="caret-back" size={24} color={icon} onPress={router.back} />
-      <Text style={screenTitleStyle}>Settings Screen</Text>
+      <Text style={screenTitleStyle}>Settings</Text>
       <Text style={screenTitleStyle}>{theme}</Text>
       <Switch value={theme === 'dark'} onValueChange={handelValueChange} />
     </View>

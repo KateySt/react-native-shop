@@ -1,23 +1,15 @@
 import * as ImagePicker from 'expo-image-picker';
-import { Redirect, useRouter } from 'expo-router';
+import { Redirect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Animated, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { useAppDispatch } from '@/features/hooks';
-import {
-  updateUserAsync,
-  getUsersAsync,
-  selectJwt,
-  selectUsers,
-  selectCred,
-  selectUser,
-  setUser,
-} from '@/features/user/userSlice';
+import { updateUserAsync, selectJwt, selectUsers, selectCred, selectUser, setUser } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { User } from '@/interface/User';
-import { SPACING, FONTSIZE, COLORS } from '@/theme/theme';
+import { SPACING, FONTSIZE, COLORS, BORDERRADIUS } from '@/theme/theme';
 
 const ProfileScreen = () => {
   const { text } = useAdaptation();
@@ -47,7 +39,12 @@ const ProfileScreen = () => {
   useEffect(() => {
     if (cred === null) return;
     if (users.length === 0) return;
-    dispatch(setUser(users.find((el) => el.username === cred.username && el.password === cred.password)));
+    dispatch(
+      setUser({
+        ...users.find((el) => el.username === cred.username && el.password === cred.password),
+        image: 'https://cameralabs.org/media/k2/items/cache/903e9b1fe43aee5c9b1041341d4bc406_L.jpg',
+      }),
+    );
   }, []);
 
   const handleUpdateUser = useCallback(
@@ -73,7 +70,7 @@ const ProfileScreen = () => {
     });
 
     if (!result.cancelled) {
-      setEditedUser({ ...editedUser, profileImage: result.uri });
+      setEditedUser({ ...editedUser, image: result.assets[0].uri });
     }
   };
 
@@ -96,17 +93,17 @@ const ProfileScreen = () => {
         <>
           <View style={styles.profileContainer}>
             <Image
-              source={{ uri: 'https://cameralabs.org/media/k2/items/cache/903e9b1fe43aee5c9b1041341d4bc406_L.jpg' }}
+              source={{ uri: user?.image }}
               style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 20 }}
             />
             <View style={styles.userInfo}>
               <Text style={[textStyle, styles.userInfoText]}>
-                {user?.username
-                  ? `Username: ${user.username}`
-                  : `Name: ${user?.name?.firstname} ${user?.name?.lastname}`}
+                {user?.name?.firstname
+                  ? `Name: ${user?.name?.firstname} ${user?.name?.lastname}`
+                  : `Username: ${user?.username}`}
               </Text>
               <Text style={[textStyle, styles.userInfoText]}>
-                {user?.password ? `Phone: +00 000 00 00 000` : `Phone: ${user?.phone}`}
+                {user?.phone ? `Phone: ${user?.phone}` : `Phone: +00 000 00 00 000`}
               </Text>
               <Text style={[textStyle, styles.userInfoText]}>{`Email: ${user?.email}`}</Text>
               {user?.address ? (
@@ -178,7 +175,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     marginBottom: SPACING.space_16,
     padding: SPACING.space_16,
-    borderRadius: 10,
+    borderRadius: BORDERRADIUS.radius_10,
     alignItems: 'center',
   },
   screenTitle: {

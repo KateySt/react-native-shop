@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
+import { Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Animated, StyleSheet, Text, TextInput, View } from 'react-native';
+import * as Yup from 'yup';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -8,13 +10,15 @@ import { createUserAsync, getUsersAsync, login, selectUser, setUser } from '@/fe
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
 
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required('Username is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+});
 const SignUp = () => {
   const { borderColor, text, background } = useAdaptation();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const [username, setUsername] = useState('user');
-  const [password, setPassword] = useState('12345678');
-  const [email, setEmail] = useState('user1@gmail.com');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const fadeAnim = useState(new Animated.Value(0))[0];
@@ -23,13 +27,13 @@ const SignUp = () => {
     dispatch(getUsersAsync());
   }, []);
 
-  const handleSignUp = useCallback(async () => {
+  const handleSignUp = useCallback(async (values: { username: string; password: string; email: string }) => {
     setIsLoading(true);
-    await dispatch(createUserAsync({ username, password, email }));
+    await dispatch(createUserAsync({ username: values.username, password: values.password, email: values.email }));
     dispatch(login('jwt'));
     setIsLoading(false);
     router.push('/profile');
-    dispatch(setUser({ username, password, email }));
+    dispatch(setUser({ username: values.username, password: values.password, email: values.email }));
   }, []);
 
   Animated.timing(fadeAnim, {
@@ -51,35 +55,47 @@ const SignUp = () => {
   }
 
   return (
-    <Animated.View style={styles.container}>
-      <TextInput
-        style={[styles.input, { borderColor }]}
-        placeholder="Username"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-        placeholderTextColor={COLORS.primaryLightGreyHex}
-      />
-      <TextInput
-        style={[styles.input, { borderColor }]}
-        placeholder="Email"
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      />
-      <TextInput
-        style={[styles.input, { borderColor }]}
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-        secureTextEntry
-        placeholderTextColor={COLORS.primaryLightGreyHex}
-      />
-      <PressableComponent style={[styles.button, { backgroundColor: COLORS.primaryVioletHex }]} onPress={handleSignUp}>
-        <Text style={[{ color: background }]}>Sign Up</Text>
-      </PressableComponent>
-      <Text style={{ color: text }} onPress={() => router.push('/sign-in')}>
-        Sing In
-      </Text>
-    </Animated.View>
+    <Formik
+      initialValues={{ username: 'user', email: 'user1@gmail.com', password: '12345678' }}
+      onSubmit={handleSignUp}
+      validationSchema={validationSchema}>
+      {({ handleChange, handleBlur, handleSubmit, values, touched, errors }) => (
+        <Animated.View style={styles.container}>
+          <TextInput
+            style={[styles.input, { borderColor }]}
+            placeholder="Username"
+            value={values.username}
+            onChangeText={handleChange('username')}
+            placeholderTextColor={COLORS.primaryLightGreyHex}
+          />
+          {touched.username && errors.username && <Text>{errors.username}</Text>}
+          <TextInput
+            value={values.email}
+            style={[styles.input, { borderColor }]}
+            onChangeText={handleChange('email')}
+            placeholder="Email"
+          />
+          {touched.email && errors.email && <Text>{errors.email}</Text>}
+          <TextInput
+            value={values.password}
+            style={[styles.input, { borderColor }]}
+            placeholder="Password"
+            onChangeText={handleChange('password')}
+            secureTextEntry
+            placeholderTextColor={COLORS.primaryLightGreyHex}
+          />
+          {touched.password && errors.password && <Text>{errors.password}</Text>}
+          <PressableComponent
+            style={[styles.button, { backgroundColor: COLORS.primaryVioletHex }]}
+            onPress={() => handleSubmit(values)}>
+            <Text style={[{ color: background }]}>Sign Up</Text>
+          </PressableComponent>
+          <Text style={{ color: text }} onPress={() => router.push('/sign-in')}>
+            Sing In
+          </Text>
+        </Animated.View>
+      )}
+    </Formik>
   );
 };
 

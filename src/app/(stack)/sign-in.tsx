@@ -1,18 +1,23 @@
-import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Redirect, useRouter } from 'expo-router';
+import { Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
+import * as Yup from 'yup';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getUsersAsync, selectUser, setCred, setUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
+
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required('Username is required'),
+  password: Yup.string().min(4, 'Password must be at least 8 characters').required('Password is required'),
+});
 const SignIn = () => {
   const dispatch = useAppDispatch();
   const { borderColor, background, text } = useAdaptation();
   const user = useAppSelector(selectUser);
-  const [username, setUsername] = useState<string>('johnd');
-  const [password, setPassword] = useState<string>('m38rmF$');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -20,13 +25,13 @@ const SignIn = () => {
     dispatch(getUsersAsync());
   }, []);
 
-  const handleSignIn = useCallback(async () => {
+  const handleSignIn = async (values: { username: string; password: string }) => {
     setIsLoading(true);
-    await dispatch(setUserAsync(username, password));
-    dispatch(setCred({ username, password }));
+    await dispatch(setUserAsync(values.username, values.password));
+    dispatch(setCred(values));
     setIsLoading(false);
     router.replace('/profile');
-  }, []);
+  };
 
   const renderLoadingIndicator = () => (
     <View style={styles.loadingContainer}>
@@ -36,22 +41,35 @@ const SignIn = () => {
 
   const renderSignInForm = () => (
     <View style={styles.container}>
-      <TextInput
-        style={[styles.input, { borderColor }]}
-        placeholder="Username"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-      />
-      <TextInput
-        style={[styles.input, { borderColor }]}
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-        secureTextEntry
-      />
-      <PressableComponent style={[styles.button, { backgroundColor: COLORS.primaryVioletHex }]} onPress={handleSignIn}>
-        <Text style={[{ color: background }]}>Sign In</Text>
-      </PressableComponent>
+      <Formik
+        initialValues={{ username: 'johnd', password: 'm38rmF$' }}
+        onSubmit={handleSignIn}
+        validationSchema={validationSchema}>
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <>
+            <TextInput
+              value={values.username}
+              onChangeText={handleChange('username')}
+              style={[styles.input, { borderColor }]}
+              placeholder="Username"
+            />
+            {touched.username && errors.username && <Text>{errors.username}</Text>}
+            <TextInput
+              value={values.password}
+              onChangeText={handleChange('password')}
+              style={[styles.input, { borderColor }]}
+              placeholder="Password"
+              secureTextEntry
+            />
+            {touched.password && errors.password && <Text>{errors.password}</Text>}
+            <PressableComponent
+              style={[styles.button, { backgroundColor: COLORS.primaryVioletHex }]}
+              onPress={() => handleSubmit(values)}>
+              <Text style={[{ color: background }]}>Sign In</Text>
+            </PressableComponent>
+          </>
+        )}
+      </Formik>
       <Text style={{ color: text }} onPress={() => router.push('/sing-up')}>
         Sing Up
       </Text>
@@ -63,8 +81,7 @@ const SignIn = () => {
   }
 
   if (user) {
-    router.replace('/profile');
-    return null;
+    return <Redirect href="/profile" />;
   }
 
   return renderSignInForm();

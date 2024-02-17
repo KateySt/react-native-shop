@@ -54,7 +54,9 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     updateUser: (state, action: PayloadAction<User>) => {
-      state.users = state.users.map((user) => (user.id === action.payload.id ? { ...user, ...action.payload } : user));
+      state.users = state.users.map((existingUser) =>
+        existingUser.id === action.payload.id ? { ...existingUser, ...action.payload } : existingUser,
+      );
       if (state.user?.id === action.payload.id) {
         state.user = { ...state.user, ...action.payload };
       }
@@ -99,8 +101,9 @@ export const deleteUserAsync = (id: string) => async (dispatch: AppDispatch) => 
   await fetchDeleteUser(id).then((el: User) => dispatch(deleteUser(el)));
 };
 
-export const createUserAsync = (user: User) => async (dispatch: AppDispatch) => {
-  await fetchCreatUser(user).then((el: User) => dispatch(creatUser(el)));
-};
+export const createUserAsync =
+  (user: { username: string; password: string; email: string }) => async (dispatch: AppDispatch) => {
+    await fetchCreatUser(user).then((el: User) => dispatch(creatUser(el)));
+  };
 
 export default userSlice.reducer;
