@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getUsersAsync, selectUser, setCred, setUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
-
 const SignIn = () => {
   const dispatch = useAppDispatch();
   const { borderColor, background, text } = useAdaptation();

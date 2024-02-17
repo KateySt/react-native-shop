@@ -19,3 +19,7 @@ export const categoryScreenOptions: NativeStackNavigationOptions = {
   presentation: 'modal',
   headerTitle: '',
 };
+
+export const mainStackScreenOptions: ComponentProps<typeof Stack>['screenOptions'] = {
+  headerShown: false,
+};
