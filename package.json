@@ -23,6 +23,7 @@
     "@types/react-native-star-rating": "^1.1.6",
     "expo": "~50.0.4",
     "expo-constants": "~15.4.5",
+    "expo-image-picker": "^14.7.1",
     "expo-linking": "~6.2.2",
     "expo-router": "~3.4.6",
     "expo-secure-store": "^12.8.1",

@@ -22,7 +22,7 @@ const ProductScreen: React.FC = () => {
   const textStyle = { color: text };
   const router = useRouter();
   const handlePressCategory = (category: string) => {
-    router.push(`/(drawer)/(stack)/categories/${category}`);
+    router.push(`(stack)/(drawer)/(stack)/categories/${category}`);
   };
 
   useEffect(() => {

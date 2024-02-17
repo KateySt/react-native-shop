@@ -39,6 +39,9 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
   };
 };
 
+export const homeScreenOptions = {
+  tabBarLabel: 'Home',
+};
 export const productsScreenOptions = {
   tabBarLabel: 'Products',
 };
