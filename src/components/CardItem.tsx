@@ -4,14 +4,15 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { selectLikes, selectProduct, setLike } from '@/features/product/productSlice';
+import { selectLikes, setLike } from '@/features/product/productSlice';
+import { selectJwt } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useOrientation } from '@/hooks/useOrientation';
 import { useScreenDimensions } from '@/hooks/useScreenDimensions';
-import { CartItemProps } from '@/interface/CartItemProps';
+import { Product } from '@/interface/Product';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
-const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description }) => {
+const CardItem: React.FC<Product> = ({ data }) => {
   const screenDimensions = useScreenDimensions();
   const orientation = useOrientation();
 
@@ -23,36 +24,38 @@ const CardItem: React.FC<CartItemProps> = ({ name, image, prices, description })
   const screenCardStyle = [styles.card, { backgroundColor: background }, { shadowColor: icon }];
   const dispatch = useAppDispatch();
   const likes = useAppSelector(selectLikes);
-
+  const jwt = useAppSelector(selectJwt);
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    const isProductLiked = likes.some((item) => item.title === name);
+    const isProductLiked = likes.some((item) => item.title === data.title);
     setIsLiked(isProductLiked);
-  }, [likes, name]);
+  }, [likes, data]);
 
   const handleLikeToggle = useCallback(() => {
-    const isProductLiked = likes.some((item) => item.title === name);
-    if (isProductLiked) {
-      const updatedCart = likes.filter((item) => item.title !== name);
-      dispatch(setLike(updatedCart));
-    } else {
-      dispatch(setLike([...likes, { title: name, image, price: prices, description }]));
+    if (jwt) {
+      const isProductLiked = likes.some((item) => item.title === data.title);
+      if (isProductLiked) {
+        const updatedCart = likes.filter((item) => item.title !== data.title);
+        dispatch(setLike(updatedCart));
+      } else {
+        dispatch(setLike([...likes, data]));
+      }
+      setIsLiked(!isProductLiked);
     }
-    setIsLiked(!isProductLiked);
-  }, [isLiked, likes]);
+  }, [isLiked, likes, jwt]);
 
   return (
     <View style={[styles.cardContainer, { width: columnWidth }]}>
       <View style={screenCardStyle}>
-        <Image source={{ uri: image }} style={styles.image} />
+        <Image source={{ uri: data.image }} style={styles.image} />
         <View style={styles.textContainer}>
           <Text style={[styles.name, { color: text }]} numberOfLines={2} ellipsizeMode="tail">
-            {name}
+            {data.title}
           </Text>
-          <Text style={[styles.price, { color: text }]}>${prices}</Text>
+          <Text style={[styles.price, { color: text }]}>${data.price}</Text>
           <Text style={[styles.description, { color: text }]} numberOfLines={2} ellipsizeMode="tail">
-            {description}
+            {data.description}
           </Text>
         </View>
         <View style={styles.iconsContainer}>

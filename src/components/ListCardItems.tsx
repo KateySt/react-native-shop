@@ -26,7 +26,7 @@ const ListCardItems: React.FC<{ data: Product[] }> = ({ data }) => {
     if (!item || !item.title) return null;
     return (
       <Pressable onPress={() => handlePress(item)} style={styles.itemContainer}>
-        <CardItem name={item.title} image={item.image} prices={item.price} description={item.description} />
+        <CardItem data={item} />
       </Pressable>
     );
   };
