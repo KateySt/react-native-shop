@@ -10,10 +10,18 @@ import { createUserAsync, getUsersAsync, login, selectUser, setUser } from '@/fe
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Username is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+  username: Yup.string()
+    .min(4, 'Username must be at least 4 characters')
+    .max(25, 'Username must be at most 25 characters')
+    .required('Username is required'),
+  email: Yup.string().email('Invalid email').matches(emailRegex, 'Email is not valid').required('Email is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(20, 'Password must be at most 20 characters')
+    .required('Password is required'),
 });
 const SignUp = () => {
   const { borderColor, text, background } = useAdaptation();
