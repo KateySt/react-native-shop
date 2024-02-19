@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import { ActivityIndicator, FlatList, ListRenderItem, Pressable, StyleSheet, View } from 'react-native';
 
 import CardItem from '@/components/CardItem';
+import Splash from '@/components/Splash';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useOrientation } from '@/hooks/useOrientation';
 import { Product } from '@/interface/Product';
@@ -34,7 +35,7 @@ const ListCardItems: React.FC<{ data: Product[] }> = ({ data }) => {
   if (!data) {
     return (
       <View style={screenBackgroundStyle}>
-        <ActivityIndicator size="large" color={COLORS.primaryVioletHex} />
+        <Splash />
       </View>
     );
   }

@@ -49,7 +49,6 @@ const SingleCard: React.FC<Props> = ({ card, handleChoice, flipped, disabled }) 
 const styles = StyleSheet.create({
   card: {
     position: 'relative',
-    aspectRatio: 1,
   },
   front: {
     width,

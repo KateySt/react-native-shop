@@ -57,6 +57,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ text }) => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: SPACING.space_16,
     flexDirection: 'row',
   },
   input: {
@@ -72,8 +73,8 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   headerContainer: {
+    marginTop: SPACING.space_16,
     paddingHorizontal: SPACING.space_20,
-    marginTop: SPACING.space_4,
     marginBottom: SPACING.space_4,
   },
 });

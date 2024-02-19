@@ -15,9 +15,6 @@ const useScreenDimensions = (): ScreenDimensions => {
 
   useEffect(() => {
     Dimensions.addEventListener('change', handleScreenChange);
-    return () => {
-      Dimensions.removeEventListener('change', handleScreenChange);
-    };
   }, []);
 
   return screenDimensions;

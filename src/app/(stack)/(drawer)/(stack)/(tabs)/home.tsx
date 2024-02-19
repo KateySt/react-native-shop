@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import SingleCard from '@/components/SingleCard';
@@ -83,14 +83,16 @@ const HomeScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <PressableComponent
-        style={[styles.button, isButtonScaled ? styles.scaledButton : null]}
-        onPress={handleButtonPress}
-        disabled={disabled}>
-        <Text style={{ color: background }}>New Game</Text>
-      </PressableComponent>
-      <Text style={{ color: icon }}>Turns: {turns}</Text>
+    <ScrollView style={styles.container}>
+      <View style={styles.scopeContainer}>
+        <Pressable
+          style={[styles.button, isButtonScaled ? styles.scaledButton : null]}
+          onPress={handleButtonPress}
+          disabled={disabled}>
+          <Text style={{ color: background }}>New Game</Text>
+        </Pressable>
+        <Text style={[{ color: icon }]}>Turns: {turns}</Text>
+      </View>
       <View style={styles.cardGrid}>
         {cards.map((card, id) => (
           <SingleCard
@@ -102,27 +104,30 @@ const HomeScreen: React.FC = () => {
           />
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    marginTop: SPACING.space_16,
   },
+  scopeContainer: { justifyContent: 'center', alignItems: 'center' },
   button: {
+    width: 200,
+    alignItems: 'center',
     padding: SPACING.space_8,
     borderRadius: BORDERRADIUS.radius_4,
     backgroundColor: COLORS.primaryVioletHex,
-    marginVertical: SPACING.space_16,
+    marginTop: SPACING.space_16,
   },
   cardGrid: {
     marginTop: SPACING.space_16,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    //alignItems: 'center',
+    alignItems: 'center',
   },
   scaledButton: {
     transform: [{ scale: 1.1 }],

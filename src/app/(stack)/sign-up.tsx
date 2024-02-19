@@ -37,11 +37,25 @@ const SignUp = () => {
 
   const handleSignUp = useCallback(async (values: { username: string; password: string; email: string }) => {
     setIsLoading(true);
-    await dispatch(createUserAsync({ username: values.username, password: values.password, email: values.email }));
+    await dispatch(
+      createUserAsync({
+        username: values.username,
+        password: values.password,
+        email: values.email,
+      }),
+    );
     dispatch(login('jwt'));
     setIsLoading(false);
     router.push('/profile');
-    dispatch(setUser({ username: values.username, password: values.password, email: values.email }));
+    dispatch(
+      setUser({
+        name: { firstname: '', lastname: '' },
+        address: { city: '', street: '', number: 0, zipcode: '', geolocation: '' },
+        username: values.username,
+        password: values.password,
+        email: values.email,
+      }),
+    );
   }, []);
 
   Animated.timing(fadeAnim, {

@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Redirect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -9,21 +10,23 @@ import Splash from '@/components/Splash';
 import { useAppDispatch } from '@/features/hooks';
 import { selectCred, selectJwt, selectUser, selectUsers, setUser, updateUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
+import { useScreenDimensions } from '@/hooks/useScreenDimensions';
 import { User } from '@/interface/User';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const ProfileScreen = () => {
-  const { text } = useAdaptation();
-  const textStyle = { color: text };
+  const { text, icon, borderColor } = useAdaptation();
+  const textStyle = { color: text, color: icon, borderColor };
+  const dispatch = useAppDispatch();
   const jwt = useSelector(selectJwt);
   const users = useSelector(selectUsers);
   const cred = useSelector(selectCred);
-  const dispatch = useAppDispatch();
   const user = useSelector(selectUser);
   const [isEdit, setIsEdit] = useState(false);
   const [editedUser, setEditedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const fadeAnim = useState(new Animated.Value(0))[0];
+  const dimensions = useScreenDimensions();
 
   useEffect(() => {
     if (user) {
@@ -44,6 +47,7 @@ const ProfileScreen = () => {
       setUser({
         ...users.find((el) => el.username === cred.username && el.password === cred.password),
         image: 'https://cameralabs.org/media/k2/items/cache/903e9b1fe43aee5c9b1041341d4bc406_L.jpg',
+        banner: 'https://cameralabs.org/media/k2/items/cache/903e9b1fe43aee5c9b1041341d4bc406_L.jpg',
       }),
     );
   }, []);
@@ -62,7 +66,7 @@ const ProfileScreen = () => {
     setIsEdit(true);
   };
 
-  const pickImage = async () => {
+  const pickImage = async (isBanner: boolean) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -71,7 +75,11 @@ const ProfileScreen = () => {
     });
 
     if (!result.cancelled) {
-      setEditedUser({ ...editedUser, image: result.assets[0].uri });
+      if (isBanner) {
+        setEditedUser({ ...editedUser, banner: result.assets[0].uri });
+      } else {
+        setEditedUser({ ...editedUser, image: result.assets[0].uri });
+      }
     }
   };
 
@@ -89,14 +97,61 @@ const ProfileScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <Text style={[styles.screenTitle, textStyle]}>Profile Screen</Text>
       {!isEdit && (
         <>
           <View style={styles.profileContainer}>
-            <Image
-              source={{ uri: user?.image }}
-              style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 20 }}
-            />
+            {user?.banner ? (
+              <Image
+                source={{ uri: user?.banner }}
+                style={[
+                  styles.profileImage,
+                  {
+                    width: dimensions.width * 0.9,
+                    height: 150,
+                    borderRadius: BORDERRADIUS.radius_25,
+                  },
+                ]}
+              />
+            ) : (
+              <View
+                style={[
+                  styles.placeholderImage,
+                  {
+                    width: dimensions.width * 0.9,
+                    height: 150,
+                    borderRadius: BORDERRADIUS.radius_25,
+                    backgroundColor: COLORS.primaryLightGreyHex,
+                  },
+                ]}
+              />
+            )}
+            {user?.image ? (
+              <Image
+                source={{ uri: user?.image }}
+                style={[
+                  styles.profileImage,
+                  {
+                    zIndex: 1,
+                    position: 'absolute',
+                    top: 90,
+                  },
+                ]}
+              />
+            ) : (
+              <MaterialIcons
+                name="person"
+                color={COLORS.primaryLightGreyHex}
+                size={100}
+                style={[
+                  styles.placeholderImage,
+                  {
+                    zIndex: 1,
+                    position: 'absolute',
+                    top: 90,
+                  },
+                ]}
+              />
+            )}
             <View style={styles.userInfo}>
               <Text style={[textStyle, styles.userInfoText]}>
                 {user?.name?.firstname
@@ -125,7 +180,10 @@ const ProfileScreen = () => {
       )}
       {isEdit && (
         <>
-          <PressableComponent onPress={pickImage}>
+          <PressableComponent onPress={() => pickImage(true)}>
+            <Text style={styles.uploadImageButton}>Upload Profile Banner</Text>
+          </PressableComponent>
+          <PressableComponent onPress={() => pickImage(false)}>
             <Text style={styles.uploadImageButton}>Upload Profile Image</Text>
           </PressableComponent>
           <TextInput
@@ -169,8 +227,9 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: SPACING.space_16,
-    marginTop: SPACING.space_24,
+    marginTop: SPACING.space_20,
     alignItems: 'center',
   },
   profileContainer: {
@@ -179,9 +238,11 @@ const styles = StyleSheet.create({
     borderRadius: BORDERRADIUS.radius_10,
     alignItems: 'center',
   },
-  screenTitle: {
-    fontSize: FONTSIZE.size_24,
-    marginBottom: SPACING.space_16,
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: SPACING.space_20,
   },
   editProfileButton: {
     fontSize: FONTSIZE.size_16,
@@ -202,15 +263,21 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     width: 200,
-    borderColor: COLORS.primaryBlackHex,
     borderWidth: 1,
-    marginBottom: SPACING.space_16,
+    marginBottom: SPACING.space_18,
     paddingHorizontal: SPACING.space_8,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  placeholderImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: COLORS.secondaryLightGreyHex,
+    marginBottom: SPACING.space_20,
   },
 });
 
