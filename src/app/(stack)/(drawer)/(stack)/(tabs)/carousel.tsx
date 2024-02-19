@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Slider from '@/components/Slider';
+import Splash from '@/components/Splash';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductsAsync, selectProducts } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
-import { COLORS } from '@/theme/theme';
 
 const CarouselScreen: React.FC = () => {
   const { background } = useAdaptation();
@@ -22,7 +22,7 @@ const CarouselScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={screenBackgroundStyle}>
-        <ActivityIndicator size="large" color={COLORS.primaryVioletHex} />
+        <Splash />
       </View>
     );
   }

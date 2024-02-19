@@ -1,15 +1,16 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Redirect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Animated, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Animated, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { PressableComponent } from '@/components/PressableComponent';
+import Splash from '@/components/Splash';
 import { useAppDispatch } from '@/features/hooks';
-import { updateUserAsync, selectJwt, selectUsers, selectCred, selectUser, setUser } from '@/features/user/userSlice';
+import { selectCred, selectJwt, selectUser, selectUsers, setUser, updateUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { User } from '@/interface/User';
-import { SPACING, FONTSIZE, COLORS, BORDERRADIUS } from '@/theme/theme';
+import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
 const ProfileScreen = () => {
   const { text } = useAdaptation();
@@ -81,7 +82,7 @@ const ProfileScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primaryVioletHex} />
+        <Splash />
       </View>
     );
   }

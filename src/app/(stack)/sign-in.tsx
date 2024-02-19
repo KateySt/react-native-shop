@@ -1,10 +1,11 @@
 import { Redirect, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import * as Yup from 'yup';
 
 import { PressableComponent } from '@/components/PressableComponent';
+import Splash from '@/components/Splash';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getUsersAsync, selectUser, setCred, setUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
@@ -35,7 +36,7 @@ const SignIn = () => {
 
   const renderLoadingIndicator = () => (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={COLORS.primaryVioletHex} />
+      <Splash />
     </View>
   );
 
@@ -62,15 +63,13 @@ const SignIn = () => {
               secureTextEntry
             />
             {touched.password && errors.password && <Text>{errors.password}</Text>}
-            <PressableComponent
-              style={[styles.button, { backgroundColor: COLORS.primaryVioletHex }]}
-              onPress={() => handleSubmit(values)}>
+            <Pressable style={styles.button} onPress={() => handleSubmit(values)}>
               <Text style={[{ color: background }]}>Sign In</Text>
-            </PressableComponent>
+            </Pressable>
           </>
         )}
       </Formik>
-      <Text style={{ color: text }} onPress={() => router.push('/sing-up')}>
+      <Text style={{ color: text }} onPress={() => router.push('/sign-up')}>
         Sing Up
       </Text>
     </View>
@@ -108,6 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: BORDERRADIUS.radius_4,
     marginBottom: SPACING.space_10,
+    backgroundColor: COLORS.primaryVioletHex,
   },
   loadingContainer: {
     flex: 1,

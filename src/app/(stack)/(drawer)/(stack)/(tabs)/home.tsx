@@ -18,7 +18,7 @@ const HomeScreen: React.FC = () => {
   const [isButtonScaled, setIsButtonScaled] = useState<boolean>(false);
   const products = useAppSelector(selectProducts);
   const dispatch = useAppDispatch();
-  const { icon } = useAdaptation();
+  const { icon, background } = useAdaptation();
 
   useEffect(() => {
     dispatch(getProductsAsync());
@@ -83,28 +83,26 @@ const HomeScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <PressableComponent
-          style={[styles.button, isButtonScaled ? styles.scaledButton : null]}
-          onPress={handleButtonPress}
-          disabled={disabled}>
-          <Text style={{ color: icon }}>New Game</Text>
-        </PressableComponent>
-        <Text style={{ color: icon }}>Turns: {turns}</Text>
-        <View style={styles.cardGrid}>
-          {cards.map((card, id) => (
-            <SingleCard
-              key={id}
-              card={card}
-              handleChoice={handleChoice}
-              flipped={card === choiceOne || card === choiceTwo || card.matched}
-              disabled={disabled}
-            />
-          ))}
-        </View>
+    <View style={styles.container}>
+      <PressableComponent
+        style={[styles.button, isButtonScaled ? styles.scaledButton : null]}
+        onPress={handleButtonPress}
+        disabled={disabled}>
+        <Text style={{ color: background }}>New Game</Text>
+      </PressableComponent>
+      <Text style={{ color: icon }}>Turns: {turns}</Text>
+      <View style={styles.cardGrid}>
+        {cards.map((card, id) => (
+          <SingleCard
+            key={id}
+            card={card}
+            handleChoice={handleChoice}
+            flipped={card === choiceOne || card === choiceTwo || card.matched}
+            disabled={disabled}
+          />
+        ))}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -124,6 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    //alignItems: 'center',
   },
   scaledButton: {
     transform: [{ scale: 1.1 }],
