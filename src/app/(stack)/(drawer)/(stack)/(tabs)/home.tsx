@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { PressableComponent } from '@/components/PressableComponent';
 import SingleCard from '@/components/SingleCard';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductsAsync, selectProducts } from '@/features/product/productSlice';
