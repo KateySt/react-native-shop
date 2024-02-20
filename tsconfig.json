@@ -7,7 +7,8 @@
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "types": ["@testing-library/jest-native","jest"]
   },
   "include": [
     "**/*.ts",

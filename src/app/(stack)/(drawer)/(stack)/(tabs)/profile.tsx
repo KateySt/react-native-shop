@@ -67,14 +67,14 @@ const ProfileScreen = () => {
   };
 
   const pickImage = async (isBanner: boolean) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
+    const result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       if (isBanner) {
         setEditedUser({ ...editedUser, banner: result.assets[0].uri });
       } else {

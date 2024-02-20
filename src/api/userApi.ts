@@ -43,6 +43,9 @@ export async function fetchUpdateUser(id: string | number, user: User): Promise<
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+      id,
+      image: user.image,
+      banner: user.banner,
       email: user.email,
       username: user.username,
       password: user.password,
