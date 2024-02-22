@@ -4,10 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import * as Yup from 'yup';
 
-import { PressableComponent } from '@/components/PressableComponent';
 import Splash from '@/components/Splash';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { getUsersAsync, selectUser, setCred, setUserAsync } from '@/features/user/userSlice';
+import { getUsersAsync, selectJwt, setCred, setUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
 
@@ -18,7 +17,7 @@ const validationSchema = Yup.object().shape({
 const SignIn = () => {
   const dispatch = useAppDispatch();
   const { borderColor, background, text } = useAdaptation();
-  const user = useAppSelector(selectUser);
+  const jwt = useAppSelector(selectJwt);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -79,7 +78,7 @@ const SignIn = () => {
     return renderLoadingIndicator();
   }
 
-  if (user) {
+  if (jwt) {
     return <Redirect href="/profile" />;
   }
 

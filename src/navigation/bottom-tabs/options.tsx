@@ -28,8 +28,8 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
           iconName = focused ? 'play' : 'stop';
           break;
         }
-        case 'home': {
-          iconName = focused ? 'home' : 'home-outline';
+        case 'cart': {
+          iconName = focused ? 'cart' : 'cart-outline';
           break;
         }
       }
@@ -39,8 +39,8 @@ export const tabScreenOptions: TabScreenOptions = ({ route }) => {
   };
 };
 
-export const homeScreenOptions = {
-  tabBarLabel: 'Home',
+export const cartScreenOptions = {
+  tabBarLabel: 'Carts',
 };
 export const productsScreenOptions = {
   tabBarLabel: 'Products',

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import ListCardItems from '@/components/ListCardItems';
+import ListProductItems from '@/components/ListProductItems';
 import SearchBar from '@/components/SearchBar';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductsAsync, selectProducts, setProductsAsync } from '@/features/product/productSlice';
@@ -29,7 +29,7 @@ const ProductsScreen: React.FC = () => {
   return (
     <View style={screenBackgroundStyle}>
       <SearchBar text={setText} />
-      <ListCardItems data={products} />
+      <ListProductItems data={products} />
     </View>
   );
 };

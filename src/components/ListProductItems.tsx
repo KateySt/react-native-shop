@@ -1,16 +1,16 @@
 import { useScrollToTop } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
-import { ActivityIndicator, FlatList, ListRenderItem, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, ListRenderItem, Pressable, StyleSheet, View } from 'react-native';
 
-import CardItem from '@/components/CardItem';
+import ProductItem from '@/components/ProductItem';
 import Splash from '@/components/Splash';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useOrientation } from '@/hooks/useOrientation';
 import { Product } from '@/interface/Product';
-import { COLORS, SPACING } from '@/theme/theme';
+import { SPACING } from '@/theme/theme';
 
-const ListCardItems: React.FC<{ data: Product[] }> = ({ data }) => {
+const ListProductItems: React.FC<{ data: Product[] }> = ({ data }) => {
   const orientation = useOrientation();
   const numColumns = orientation === 'landscape' ? 2 : 1;
   const { background } = useAdaptation();
@@ -27,7 +27,7 @@ const ListCardItems: React.FC<{ data: Product[] }> = ({ data }) => {
     if (!item || !item.title) return null;
     return (
       <Pressable onPress={() => handlePress(item)} style={styles.itemContainer}>
-        <CardItem data={item} />
+        <ProductItem data={item} />
       </Pressable>
     );
   };
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListCardItems;
+export default ListProductItems;

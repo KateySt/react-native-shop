@@ -12,7 +12,7 @@ import { useScreenDimensions } from '@/hooks/useScreenDimensions';
 import { Product } from '@/interface/Product';
 import { BORDERRADIUS, COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
-const CardItem: React.FC<{ data: Product }> = ({ data }) => {
+const ProductItem: React.FC<{ data: Product }> = ({ data }) => {
   const screenDimensions = useScreenDimensions();
   const orientation = useOrientation();
 
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardItem;
+export default ProductItem;

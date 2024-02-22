@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Animated, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import Splash from '@/components/Splash';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { createUserAsync, getUsersAsync, login, selectUser, setUser } from '@/features/user/userSlice';
+import { createUserAsync, getUsersAsync, login, selectJwt, selectUser, setUser } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { BORDERRADIUS, COLORS, SPACING } from '@/theme/theme';
 
@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
 const SignUp = () => {
   const { borderColor, text, background } = useAdaptation();
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
+  const jwt = useAppSelector(selectJwt);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const fadeAnim = useState(new Animated.Value(0))[0];
@@ -72,8 +72,8 @@ const SignUp = () => {
     );
   }
 
-  if (user) {
-    return null;
+  if (jwt) {
+    return <Redirect href="/profile" />;
   }
 
   return (

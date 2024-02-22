@@ -5,21 +5,21 @@ import type { AppDispatch, RootState } from '@/features/store';
 import { User } from '@/interface/User';
 
 export interface UserState {
-  user: User | null;
+  user: User;
   isLoading: boolean;
   error: string | null;
   jwt: string | null;
   users: User[];
-  cred: { username: string; password: string } | null;
+  cred: { username: string; password: string };
 }
 
 const initialState: UserState = {
-  user: null,
+  user: {} as User,
   isLoading: false,
   error: null,
   jwt: null,
   users: [],
-  cred: null,
+  cred: {} as { username: string; password: string },
 };
 export const userSlice = createSlice({
   name: 'users',
@@ -62,7 +62,7 @@ export const userSlice = createSlice({
       }
     },
     deleteUser: (state, action: PayloadAction<User>) => {
-      state.user = null;
+      state.user = {} as User;
       state.users.filter((el) => el.id !== action.payload.id);
     },
   },

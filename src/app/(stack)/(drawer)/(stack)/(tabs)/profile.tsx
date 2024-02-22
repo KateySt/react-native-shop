@@ -3,11 +3,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Redirect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Animated, Image, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import { PressableComponent } from '@/components/PressableComponent';
 import Splash from '@/components/Splash';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { selectCred, selectJwt, selectUser, selectUsers, setUser, updateUserAsync } from '@/features/user/userSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
 import { useScreenDimensions } from '@/hooks/useScreenDimensions';
@@ -18,10 +17,10 @@ const ProfileScreen = () => {
   const { text, icon, borderColor } = useAdaptation();
   const textStyle = { color: text, color: icon, borderColor };
   const dispatch = useAppDispatch();
-  const jwt = useSelector(selectJwt);
-  const users = useSelector(selectUsers);
-  const cred = useSelector(selectCred);
-  const user = useSelector(selectUser);
+  const jwt = useAppSelector(selectJwt);
+  const users = useAppSelector(selectUsers);
+  const cred = useAppSelector(selectCred);
+  const user = useAppSelector(selectUser);
   const [isEdit, setIsEdit] = useState(false);
   const [editedUser, setEditedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +42,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     if (cred === null) return;
     if (users.length === 0) return;
+    if (user.username !== undefined) return;
     dispatch(
       setUser({
         ...users.find((el) => el.username === cred.username && el.password === cred.password),
@@ -154,7 +154,7 @@ const ProfileScreen = () => {
             )}
             <View style={styles.userInfo}>
               <Text style={[textStyle, styles.userInfoText]}>
-                {user?.name?.firstname
+                {user?.name !== undefined
                   ? `Name: ${user?.name?.firstname} ${user?.name?.lastname}`
                   : `Username: ${user?.username}`}
               </Text>
@@ -162,7 +162,7 @@ const ProfileScreen = () => {
                 {user?.phone ? `Phone: ${user?.phone}` : `Phone: +00 000 00 00 000`}
               </Text>
               <Text style={[textStyle, styles.userInfoText]}>{`Email: ${user?.email}`}</Text>
-              {user?.address ? (
+              {user?.address?.city ? (
                 <>
                   <Text style={[textStyle, styles.userInfoText]}>{`City: ${user?.address?.city}`}</Text>
                   <Text style={[textStyle, styles.userInfoText]}>{`Street: ${user?.address?.street}`}</Text>
@@ -189,13 +189,13 @@ const ProfileScreen = () => {
           <TextInput
             style={[styles.input, textStyle]}
             placeholder="First Name"
-            value={editedUser?.name.firstname || ''}
+            value={editedUser?.name?.firstname || ''}
             onChangeText={(text) => setEditedUser({ ...editedUser, name: { ...editedUser?.name, firstname: text } })}
           />
           <TextInput
             style={[styles.input, textStyle]}
             placeholder="Last Name"
-            value={editedUser?.name.lastname || ''}
+            value={editedUser?.name?.lastname || ''}
             onChangeText={(text) => setEditedUser({ ...editedUser, name: { ...editedUser?.name, lastname: text } })}
           />
           <TextInput

@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import ListCardItems from '@/components/ListCardItems';
+import ListProductItems from '@/components/ListProductItems';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { getProductsByCategoryAsync, selectProductsByCategory } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
@@ -26,7 +26,7 @@ const CategoriesScreen: React.FC = () => {
       <Ionicons name="caret-back" size={24} color={icon} onPress={() => router.push('/products')} />
       <View style={[screenBackgroundStyle, styles.container]}>
         <Text style={textStyle}>Category: {slug}</Text>
-        <ListCardItems data={products} />
+        <ListProductItems data={products} />
       </View>
     </>
   );

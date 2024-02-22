@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import ListCardItems from '@/components/ListCardItems';
+import ListProductItems from '@/components/ListProductItems';
 import { useAppSelector } from '@/features/hooks';
 import { selectLikes } from '@/features/product/productSlice';
 import { useAdaptation } from '@/hooks/useAdaptation';
@@ -27,7 +27,7 @@ const Heart: React.FC = () => {
   return (
     <View style={screenModalStyle}>
       <Ionicons name="caret-back" size={24} color={icon} onPress={router.back} />
-      <ListCardItems data={likes} />
+      <ListProductItems data={likes} />
     </View>
   );
 };
