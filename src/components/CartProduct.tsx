@@ -1,15 +1,16 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-import { Product } from '@/interface/Product';
+import { useAdaptation } from '@/hooks/useAdaptation';
 import { COLORS, FONTSIZE, SPACING } from '@/theme/theme';
 
-const CartProduct: React.FC<{ data: { quantity: string; product: Product } }> = ({ data }) => {
+const CartProduct: React.FC<{ data: { quantity: number; productId: number; product: any } }> = ({ data }) => {
+  const { text } = useAdaptation();
   return (
     <View style={styles.container}>
-      <Text style={styles.quantity}>{data.quantity}</Text>
-      <Text style={styles.title}>{data.product.title}</Text>
-      <Text style={styles.price}>{data.product.price}</Text>
+      <Text style={[styles.quantity, { color: text }]}>{data.quantity}</Text>
+      <Text style={[styles.title, { color: text }]}>{data.product.title}</Text>
+      <Text style={[styles.price, { color: text }]}>{data.product.price}</Text>
     </View>
   );
 };

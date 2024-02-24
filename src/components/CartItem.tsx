@@ -18,7 +18,7 @@ const formatDate = (dateString: string) => {
 
 const CartItem: React.FC<{ data: Order }> = ({ data }) => {
   const products = useAppSelector(selectProducts);
-  const { background, icon } = useAdaptation();
+  const { background, icon, text } = useAdaptation();
 
   const filteredProducts = data.products.map((product) => {
     const productInfo = products.find((info) => info.id === product.productId);
@@ -32,7 +32,7 @@ const CartItem: React.FC<{ data: Order }> = ({ data }) => {
     <>
       {products && (
         <View style={[styles.container, { backgroundColor: background, shadowColor: icon }]}>
-          <Text style={styles.date}>{formatDate(data.date)}</Text>
+          <Text style={[styles.date, { color: text }]}>{formatDate(data.date)}</Text>
           {filteredProducts.map((product) => (
             <View key={product.productId}>
               <CartProduct data={product} />
