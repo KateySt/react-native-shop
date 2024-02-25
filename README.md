@@ -1,4 +1,4 @@
-# eShopApp
+# ShopApp
 Welcome to ShopApp - your personal product management application built with React Native! This application offers numerous convenient features and an intuitive interface to manage your product list.
 ## Features
 
