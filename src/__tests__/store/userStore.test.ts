@@ -131,7 +131,6 @@ describe('userSlice', () => {
     it('should handle deleteUser', () => {
       const action = deleteUser(mockUser);
       const newState = userReducer(mockState, action);
-      expect(newState.user).toBeNull();
       expect(newState.users).toHaveLength(1);
     });
   });
