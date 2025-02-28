@@ -11,13 +11,6 @@ Welcome to ShopApp - your personal product management application built with Rea
 - **Product Categories and Sorting**: Organize your products by categories and sort them for convenient browsing.
 - **User Profile**: View and edit your profile to customize your user experience.
 
-## Installation
-
-1. Clone the repository: `git clone git@github.com:KateySt/react-native-shop.git`
-2. Navigate to the project folder: `cd MyAwesomeShopApp`
-3. Install dependencies: `npm install`
-4. Start the application: `expo start`
-
 ## Development Notes
 
 - This application is built using React Native, Redux, Expo Navigation, and Expo Animation.
